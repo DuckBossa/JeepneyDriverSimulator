@@ -33,8 +33,8 @@ public class LogitechSteeringWheel : MonoBehaviour {
         forcesLabel += "Play Leds : P\n";
         activeForceAndEffect = new string[9];
 		LogitechGSDK.LogiSteeringInitialize(false);
-        
-
+		properties.wheelRange = 540;
+		LogitechGSDK.LogiSetPreferredControllerProperties(properties);
 	}
 
     void OnGUI()
