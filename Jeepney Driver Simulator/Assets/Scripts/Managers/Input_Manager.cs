@@ -4,8 +4,9 @@ using System.IO;
 using System;
 
 public class Input_Manager : MonoBehaviour {
-	public static event Action<double> MoveForward; // pedal 
-	public static event Action<double> Steering; // steering wheel
+	public static event Action<float> Move; // pedal
+	public static event Action<float> Reverse; //stop twice
+	public static event Action<float> Steering; // steering wheel, parameter is current degrees
 	public static event Action<int> SetGear; // shift
 	public static event Action Honk; //one of the buttons
 	public static event Action SignalLeft; //left paddle
@@ -13,7 +14,10 @@ public class Input_Manager : MonoBehaviour {
 	public static event Action<int> ReceivePay; //hydra
 
 	LogitechGSDK.LogiControllerPropertiesData properties;
-	
+
+	//G27 Values
+	public float max_int = 32767f;
+
 	//Dev
 	public KeyCode mf = KeyCode.W;
 	public KeyCode mb = KeyCode.S;
@@ -35,22 +39,23 @@ public class Input_Manager : MonoBehaviour {
 
 
 	public void Update(){
-		//DevInput();
+		DevInput();
 		DrivingInput();
 	}
 
 //	public void GameInput(){}
 
 	public void DevInput(){
+
 		if(Input.GetKeyDown(mf)){
-			if(MoveForward != null){
-				MoveForward(1);
+			if(Move != null){
+				Move(5f);
 			}
 		}		
 
 		if(Input.GetKeyDown(mb)){
-			if(MoveForward != null){
-				MoveForward(-1);
+			if(Reverse != null){
+				Reverse(-5f);
 			}
 		}
 
@@ -77,8 +82,9 @@ public class Input_Manager : MonoBehaviour {
 			LogitechGSDK.LogiControllerPropertiesData actualProperties = new LogitechGSDK.LogiControllerPropertiesData();
 			LogitechGSDK.DIJOYSTATE2ENGINES rec;
 			rec = LogitechGSDK.LogiGetStateUnity(0);
-			steeringWheelDegrees = Mathf.Lerp(-wheelDegrees/2,wheelDegrees/2,(rec.lX /32763f + 1f)/2f);
+			steeringWheelDegrees = Mathf.Lerp(wheelDegrees/2,-wheelDegrees/2,(rec.lX /32767f + 1f)/2f);
 			Debug.Log( "wheel is steering at " + steeringWheelDegrees);
+			Debug.Log(rec.lX);
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}

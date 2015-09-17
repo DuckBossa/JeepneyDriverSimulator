@@ -3,13 +3,28 @@ using System.Collections;
 
 public class Player_Manager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	public void OnEnable(){
+		Input_Manager.Move += Move;
+		Input_Manager.Reverse += Reverse;
+		Input_Manager.Steering += SetWheel;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+
+	public void OnDisable(){
+		Input_Manager.Move -= Move;
+		Input_Manager.Reverse -= Reverse;
+		Input_Manager.Steering -= SetWheel;
+	}
+
+	void Move (float intensity){
+		gameObject.transform.position += transform.forward.normalized * intensity;
+	}
+
+	void Reverse (float intensity){
+		gameObject.transform.position += transform.forward.normalized * intensity;
+	}
+
+	void SetWheel(float degrees){
+		gameObject.transform.rotation = Quaternion.Euler(new Vector3 (0, 0, degrees + 90));
 	}
 }
