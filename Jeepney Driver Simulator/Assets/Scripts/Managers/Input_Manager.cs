@@ -5,7 +5,7 @@ using System;
 
 public class Input_Manager : MonoBehaviour {
 	public static event Action<float> Move; // pedal
-	public static event Action<float> Reverse; //stop twice
+	public static event Action<float> Break; //stop twice
 	public static event Action<float> Steering; // steering wheel, parameter is current degrees
 	public static event Action<int> SetGear; // shift
 	public static event Action Honk; //one of the buttons
@@ -14,10 +14,7 @@ public class Input_Manager : MonoBehaviour {
 	public static event Action<int> ReceivePay; //hydra
 
 	LogitechGSDK.LogiControllerPropertiesData properties;
-
-	//G27 Values
-	public float max_int = 32767f;
-
+	
 	//Dev
 	public KeyCode mf = KeyCode.W;
 	public KeyCode mb = KeyCode.S;
@@ -29,6 +26,9 @@ public class Input_Manager : MonoBehaviour {
 	public int wheelDegrees = 900;
 
 	private float steeringWheelDegrees;
+	private float gasPedal;
+	private float breakPedal;
+	private float clutchPedal;
 
 	public void Start(){
 		LogitechGSDK.LogiSteeringInitialize(false);
@@ -54,8 +54,8 @@ public class Input_Manager : MonoBehaviour {
 		}		
 
 		if(Input.GetKeyDown(mb)){
-			if(Reverse != null){
-				Reverse(-5f);
+			if(Break != null){
+				Break(-5f);
 			}
 		}
 
@@ -82,12 +82,23 @@ public class Input_Manager : MonoBehaviour {
 			LogitechGSDK.LogiControllerPropertiesData actualProperties = new LogitechGSDK.LogiControllerPropertiesData();
 			LogitechGSDK.DIJOYSTATE2ENGINES rec;
 			rec = LogitechGSDK.LogiGetStateUnity(0);
-			steeringWheelDegrees = Mathf.Lerp(wheelDegrees/2,-wheelDegrees/2,(rec.lX /32767f + 1f)/2f);
-			Debug.Log( "wheel is steering at " + steeringWheelDegrees);
-			Debug.Log(rec.lX);
+
+			steeringWheelDegrees = Mathf.Lerp(wheelDegrees/2,-wheelDegrees/2,(-rec.lX /32767f + 1f)/2f);
+			gasPedal = Mathf.Lerp(0,1,( -rec.lY/32767f + 1)/2 );
+			breakPedal = Mathf.Lerp(0,1,( -rec.lRz/32767f + 1)/2);
+			clutchPedal = Mathf.Lerp(0,1,( -rec.rglSlider[1]/32767f + 1)/2);
+			Debug.Log(clutchPedal);
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}
+			if(Move != null && gasPedal > 0){
+				Move(gasPedal);
+			}
+			if(Break != null && breakPedal > 0){
+				Break(breakPedal);
+			}
+
+
 		}
 	}
 

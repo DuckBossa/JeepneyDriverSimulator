@@ -5,14 +5,14 @@ public class Player_Manager : MonoBehaviour {
 
 	public void OnEnable(){
 		Input_Manager.Move += Move;
-		Input_Manager.Reverse += Reverse;
+		Input_Manager.Break += Reverse;
 		Input_Manager.Steering += SetWheel;
 	}
 
 
 	public void OnDisable(){
 		Input_Manager.Move -= Move;
-		Input_Manager.Reverse -= Reverse;
+		Input_Manager.Break -= Reverse;
 		Input_Manager.Steering -= SetWheel;
 	}
 
@@ -26,5 +26,6 @@ public class Player_Manager : MonoBehaviour {
 
 	void SetWheel(float degrees){
 		gameObject.transform.rotation = Quaternion.Euler(new Vector3 (0, 0, degrees + 90));
+
 	}
 }

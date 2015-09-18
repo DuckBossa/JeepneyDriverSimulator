@@ -114,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42af29c1be710b4189326a1ac7df73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_int: 32767
   mf: 119
   mb: 115
   ml: 100
@@ -147,6 +146,7 @@ GameObject:
   - 136: {fileID: 180425486}
   - 23: {fileID: 180425485}
   - 114: {fileID: 180425489}
+  - 114: {fileID: 180425490}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -221,6 +221,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5ab774741e20a40b4bf8e13ebf02ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &180425490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 180425484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b8bb2754135b2d4e988955ff4d4e609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actualState: 
+  activeForces: 
+  propertiesEdit: 
+  buttonStatus: 
+  forcesLabel: 
 --- !u!1 &1180028812
 GameObject:
   m_ObjectHideFlags: 0
