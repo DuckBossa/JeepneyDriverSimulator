@@ -4,7 +4,7 @@ using System.IO;
 using System;
 
 public class Input_Manager : MonoBehaviour {
-	public static event Action<float> Move; // pedal
+	public static event Action<float,float,float> Move; // pedal
 	public static event Action<float> Break; //stop twice
 	public static event Action<float> Steering; // steering wheel, parameter is current degrees
 	public static event Action<int> SetGear; // shift
@@ -38,7 +38,7 @@ public class Input_Manager : MonoBehaviour {
 	}
 
 
-	public void Update(){
+	public void FixedUpdate(){
 		DevInput();
 		DrivingInput();
 	}
@@ -49,7 +49,7 @@ public class Input_Manager : MonoBehaviour {
 
 		if(Input.GetKeyDown(mf)){
 			if(Move != null){
-				Move(5f);
+//				Move(5f);
 			}
 		}		
 
@@ -83,7 +83,7 @@ public class Input_Manager : MonoBehaviour {
 			LogitechGSDK.DIJOYSTATE2ENGINES rec;
 			rec = LogitechGSDK.LogiGetStateUnity(0);
 
-			steeringWheelDegrees = Mathf.Lerp(wheelDegrees/2,-wheelDegrees/2,(-rec.lX /32767f + 1f)/2f);
+			steeringWheelDegrees = Mathf.Lerp(/*wheelDegrees/2*/1,/*-wheelDegrees/2*/-1,(-rec.lX /32767f + 1f)/2f);
 			gasPedal = Mathf.Lerp(0,1,( -rec.lY/32767f + 1)/2 );
 			breakPedal = Mathf.Lerp(0,1,( -rec.lRz/32767f + 1)/2);
 			clutchPedal = Mathf.Lerp(0,1,( -rec.rglSlider[1]/32767f + 1)/2);
@@ -91,12 +91,12 @@ public class Input_Manager : MonoBehaviour {
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}
-			if(Move != null && gasPedal > 0){
-				Move(gasPedal);
+			if(Move != null && (gasPedal > 0 ||  breakPedal > 0)){
+				Move(steeringWheelDegrees,gasPedal,breakPedal);
 			}
-			if(Break != null && breakPedal > 0){
-				Break(breakPedal);
-			}
+//			if(Break != null && breakPedal > 0){
+//				Break(breakPedal);
+//			}
 
 
 		}

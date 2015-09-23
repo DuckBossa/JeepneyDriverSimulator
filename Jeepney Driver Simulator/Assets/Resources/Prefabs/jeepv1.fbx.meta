@@ -1,0 +1,148 @@
+fileFormatVersion: 2
+guid: c9e4bbec60f66f14ebda63569de5a40e
+timeCreated: 1442841319
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Bumper
+    100002: Camera
+    100004: Camera.001
+    100006: Camera.002
+    100008: Cube
+    100010: Cube.001
+    100012: Cube.003
+    100014: Cylinder
+    100016: Grill
+    100018: //RootNode
+    100020: Lamp
+    100022: Lamp L
+    100024: Lamp R
+    100026: Lamp.001
+    100028: Lamp.002
+    100030: Steering Wheel.001
+    100032: Wheel BL
+    100034: Wheel BR
+    100036: Wheel FL
+    100038: Wheel FR
+    400000: Bumper
+    400002: Camera
+    400004: Camera.001
+    400006: Camera.002
+    400008: Cube
+    400010: Cube.001
+    400012: Cube.003
+    400014: Cylinder
+    400016: Grill
+    400018: //RootNode
+    400020: Lamp
+    400022: Lamp L
+    400024: Lamp R
+    400026: Lamp.001
+    400028: Lamp.002
+    400030: Steering Wheel.001
+    400032: Wheel BL
+    400034: Wheel BR
+    400036: Wheel FL
+    400038: Wheel FR
+    2300000: Bumper
+    2300002: Cube
+    2300004: Cube.001
+    2300006: Cube.003
+    2300008: Cylinder
+    2300010: Grill
+    2300012: Lamp L
+    2300014: Lamp R
+    2300016: Steering Wheel.001
+    2300018: Wheel BL
+    2300020: Wheel BR
+    2300022: Wheel FL
+    2300024: Wheel FR
+    3300000: Bumper
+    3300002: Cube
+    3300004: Cube.001
+    3300006: Cube.003
+    3300008: Cylinder
+    3300010: Grill
+    3300012: Lamp L
+    3300014: Lamp R
+    3300016: Steering Wheel.001
+    3300018: Wheel BL
+    3300020: Wheel BR
+    3300022: Wheel FL
+    3300024: Wheel FR
+    4300000: Steering Wheel.001
+    4300002: Cube.003
+    4300004: Grill
+    4300006: Lamp R
+    4300008: Bumper
+    4300010: Wheel FL
+    4300012: Lamp L
+    4300014: Wheel FR
+    4300016: Wheel BR
+    4300018: Wheel BL
+    4300020: Cube
+    4300022: Cube.001
+    4300024: Cylinder
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
