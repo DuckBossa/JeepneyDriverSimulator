@@ -4,7 +4,7 @@ using System.IO;
 using System;
 
 public class Input_Manager : MonoBehaviour {
-	public static event Action<float,float,float> Move; // pedal
+	public static event Action<float,float> Move; // pedal
 	public static event Action<float> Break; //stop twice
 	public static event Action<float> Steering; // steering wheel, parameter is current degrees
 	public static event Action<int> SetGear; // shift
@@ -87,13 +87,15 @@ public class Input_Manager : MonoBehaviour {
 			steeringWheelIntensity = Mathf.Lerp(/*wheelDegrees/2*/1,/*-wheelDegrees/2*/-1,(-rec.lX /32767f + 1f)/2f);
 			steeringWheelDegrees = Mathf.Lerp(wheelDegrees/2,-wheelDegrees/2,(-rec.lX /32767f + 1f)/2f);
 			gasPedal = Mathf.Lerp(0,1,( -rec.lY/32767f + 1)/2 );
-			breakPedal = Mathf.Lerp(0,1,( -rec.lRz/32767f + 1)/2);
+			breakPedal = Mathf.Lerp(0,-1,( -rec.lRz/32767f + 1)/2);
 			clutchPedal = Mathf.Lerp(0,1,( -rec.rglSlider[1]/32767f + 1)/2);
+			float gasbreak = gasPedal + breakPedal;
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}
-			if(Move != null && (gasPedal > 0 ||  breakPedal > 0)){
-				Move(steeringWheelIntensity,gasPedal,breakPedal);
+			if(Move != null && (gasPedal > 0 ||  breakPedal > 0 || steeringWheelIntensity != 0)){
+				Move(steeringWheelIntensity,gasbreak);
+
 			}
 //			if(Break != null && breakPedal > 0){
 //				Break(breakPedal);

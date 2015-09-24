@@ -26,8 +26,8 @@ namespace UnityStandardAssets.Vehicles.Car{
 			Input_Manager.Steering -= SetWheel;
 		}
 		
-		void Move (float steer,float gas, float footbreak){
-			cc.Move(steer,gas,footbreak,0);
+		void Move (float steer,float gas){
+			cc.Move(steer,gas,gas,0);
 		}
 		
 		void SetWheel(float degrees){
