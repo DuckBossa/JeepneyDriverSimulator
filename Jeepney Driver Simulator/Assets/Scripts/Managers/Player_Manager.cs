@@ -31,7 +31,8 @@ namespace UnityStandardAssets.Vehicles.Car{
 		}
 		
 		void SetWheel(float degrees){
-			steeringWheel.transform.rotation = Quaternion.Euler(new Vector3 (0, 0, degrees));
+			Debug.Log(degrees);
+			steeringWheel.transform.localRotation = Quaternion.Euler(new Vector3 (0, 0, degrees));
 			
 		}
 	}
