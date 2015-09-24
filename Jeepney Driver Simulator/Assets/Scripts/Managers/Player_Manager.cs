@@ -7,7 +7,7 @@ namespace UnityStandardAssets.Vehicles.Car{
 		
 		
 		public GameObject steeringWheel;
-
+		public bool usingHardware;
 		private CarController cc;
 
 
@@ -28,6 +28,7 @@ namespace UnityStandardAssets.Vehicles.Car{
 		
 		void Move (float steer,float gas){
 			cc.Move(steer,gas,gas,0);
+			Debug.Log("moving " + gas + " " + steer);
 		}
 		
 		void SetWheel(float degrees){

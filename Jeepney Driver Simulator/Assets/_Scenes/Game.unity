@@ -37,9 +37,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
---- !u!127 &3
-LevelGameManager:
-  m_ObjectHideFlags: 0
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -68,6 +65,7 @@ LightmapSettings:
     m_TextureCompression: 1
     m_FinalGather: 0
     m_FinalGatherRayCount: 1024
+    m_ReflectionCompression: 2
   m_LightmapSnapshot: {fileID: 0}
   m_RuntimeCPUUsage: 25
 --- !u!196 &5
@@ -116,8 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mf: 119
   mb: 115
-  ml: 100
-  mr: 97
+  ml: 97
+  mr: 100
   hk: 104
   sl: 60
   sr: 62
@@ -224,6 +222,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -299,7 +298,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400038, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 290388541}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -395,52 +394,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2804bd2fd5f3d4940a6c105b891f6bc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceptInput: 1
-  connectEnds: 1
-  insertPoint: 1
-  points:
-  - {x: 232.828583, y: 4.28090187e-17, z: -192.794693}
-  - {x: 223.33313, y: 5.39827994e-17, z: -243.116943}
-  - {x: 175.954651, y: 6.56145867e-17, z: -295.501801}
-  - {x: 99.7486343, y: 6.95640234e-17, z: -313.288483}
-  - {x: .63092041, y: 5.68592174e-17, z: -256.071136}
-  - {x: -311.687439, y: 6.91008883e-17, z: -215.818817}
-  - {x: -313.979706, y: 5.81211178e-18, z: -18.1526356}
-  - {x: -306.581726, y: -6.61474498e-17, z: 206.594528}
-  - {x: -300.643799, y: -7.88356725e-17, z: 246.222916}
-  - {x: -262.466431, y: -8.72561461e-17, z: 272.522095}
-  - {x: -203.066681, y: -9.10446797e-17, z: 271.102264}
-  - {x: 24.0348454, y: -9.36729634e-17, z: 292.563385}
-  - {x: 104.163918, y: -6.77500494e-17, z: 305.11908}
-  - {x: 195.942657, y: -6.11725805e-17, z: 275.496826}
-  - {x: 221.039337, y: -6.54604863e-17, z: 218.900757}
-  - {x: 205.21991, y: 3.37385651e-18, z: -15.1945}
-  roadWidth: 44
+  acceptInput: 0
+  connectEnds: 0
+  insertPoint: -1
+  points: []
+  roadWidth: 1
   groundOffset: .100000001
-  theta:
-  - 1.38429618
-  - .835538626
-  - .229297623
-  - -.523536026
-  - -.12817575
-  - -1.55920017
-  - 1.53789127
-  - 1.42206264
-  - .603215873
-  - -.0238984171
-  - .0942203104
-  - .155429512
-  - -.312202066
-  - -1.1534152
-  - 1.50332201
-  - -1.41657662
+  theta: []
   terrainLayer: 8
   swapUV: 0
   flipU: 1
   flipV: 1
   uvScale: {x: 1, y: 1}
   uvOffset: {x: 0, y: 0}
-  mat: {fileID: 2100000, guid: b665a7da9264dcc4dbfded680b2959e7, type: 2}
+  mat: {fileID: 0}
 --- !u!4 &733921167
 Transform:
   m_ObjectHideFlags: 0
@@ -840,10 +807,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!1 &1191427463 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 100014, guid: c9e4bbec60f66f14ebda63569de5a40e, type: 3}
-  m_PrefabInternal: {fileID: 1303429462}
 --- !u!1 &1234881531
 GameObject:
   m_ObjectHideFlags: 0
@@ -1274,6 +1237,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -1497,14 +1461,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20fa55eb64c5cea4aa3c71ae19c434bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  engineSoundStyle: 0
+  engineSoundStyle: 1
   lowAccelClip: {fileID: 8300000, guid: c4d8928c75c21af43998193f0f038429, type: 3}
-  lowDecelClip: {fileID: 8300000, guid: c4d8928c75c21af43998193f0f038429, type: 3}
+  lowDecelClip: {fileID: 8300000, guid: 5699dddcce16c4543b95951c4ce0e092, type: 3}
   highAccelClip: {fileID: 8300000, guid: 03e3bd08a6e70684dbe299a3e185fdd2, type: 3}
-  highDecelClip: {fileID: 8300000, guid: 03bf91d88fce91c41995d27de63cc967, type: 3}
-  pitchMultiplier: .800000012
+  highDecelClip: {fileID: 8300000, guid: 5699dddcce16c4543b95951c4ce0e092, type: 3}
+  pitchMultiplier: 1
   lowPitchMin: 1
-  lowPitchMax: 5
+  lowPitchMax: 6
   highPitchMultiplier: .25
   maxRolloffDistance: 500
   dopplerLevel: 1
@@ -1520,7 +1484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5ab774741e20a40b4bf8e13ebf02ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steeringWheel: {fileID: 1191427463}
+  steeringWheel: {fileID: 0}
+  usingHardware: 0
 --- !u!114 &1642624481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1550,18 +1515,31 @@ MonoBehaviour:
   - {fileID: 1535439029}
   - {fileID: 221077652}
   m_CentreOfMassOffset: {x: 0, y: 0, z: 0}
-  m_MaximumSteerAngle: 45
+  m_MaximumSteerAngle: 90
   m_SteerHelper: 0
   m_TractionControl: 1
-  m_FullTorqueOverAllWheels: 3000
+  m_FullTorqueOverAllWheels: 2500
   m_ReverseTorque: 0
-  m_MaxHandbrakeTorque: 1e+08
-  m_Downforce: 300
-  m_SpeedType: 0
-  m_Topspeed: 150
+  m_MaxHandbrakeTorque: 0
+  m_Downforce: 100
+  m_SpeedType: 1
+  m_Topspeed: 160
   m_RevRangeBoundary: 1
   m_SlipLimit: .300000012
   m_BrakeTorque: 10000
+  m_TransmissionType: 0
+  m_GearRatios:
+  - -4.78299999
+  - 5.01599979
+  - 2.67199993
+  - 1.58500004
+  - 1
+  - .769999981
+  m_FinalRatio: 4.32999992
+  m_MaxRPM: 7000
+  m_MinRPM: 1000
+  m_MaxTorque: 650
+  m_TireCircumference: 1.53999996
 --- !u!54 &1642624482
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1570,7 +1548,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1642624477}
   serializedVersion: 2
-  m_Mass: 2000
+  m_Mass: 2400
   m_Drag: .100000001
   m_AngularDrag: .0500000007
   m_UseGravity: 1
@@ -1735,6 +1713,7 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
+  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -1747,7 +1726,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1808639396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.05999994, y: 3.8900001, z: 1.51999998}
+  m_LocalPosition: {x: 1.10000002, y: 3.91000009, z: -.769999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1554325287}
@@ -1846,6 +1825,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -1990,6 +1970,7 @@ AudioSource:
   m_Pitch: 1
   Loop: 0
   Mute: 0
+  Spatialize: 0
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
@@ -2081,15 +2062,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -.99000001
+      value: -1.13600004
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.79999995
+      value: 4.13999987
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1.09000003
+      value: 1.45000005
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 2}
       propertyPath: m_LocalRotation.x

@@ -114,7 +114,7 @@ public class OVRSceneSampleController : MonoBehaviour
         // Make sure to hide cursor 
         if (Application.isEditor == false)
         {
-#if UNITY_5_0 || UNITY_5_1
+#if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 			Cursor.visible = false; 
 			Cursor.lockState = CursorLockMode.Locked;
 #else

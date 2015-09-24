@@ -18,8 +18,8 @@ public class Input_Manager : MonoBehaviour {
 	//Dev
 	public KeyCode mf = KeyCode.W;
 	public KeyCode mb = KeyCode.S;
-	public KeyCode ml = KeyCode.D;
-	public KeyCode mr = KeyCode.A;
+	public KeyCode ml = KeyCode.A;
+	public KeyCode mr = KeyCode.D;
 	public KeyCode hk = KeyCode.H;
 	public KeyCode sl = KeyCode.Less;
 	public KeyCode sr = KeyCode.Greater;
@@ -31,49 +31,53 @@ public class Input_Manager : MonoBehaviour {
 	private float breakPedal;
 	private float clutchPedal;
 
+	private float gasbreak;
+	private float direction;
+
+	private bool isHardware;
+
 	public void Start(){
+		if (isHardware) SetupSteeringWheel();
+	}
+
+	private void SetupSteeringWheel(){
 		LogitechGSDK.LogiSteeringInitialize(false);
 		properties.wheelRange = wheelDegrees;
 		LogitechGSDK.LogiSetPreferredControllerProperties(properties);
 		steeringWheelDegrees = 0f;
 	}
 
-
 	public void FixedUpdate(){
+		resetKeys ();
 		DevInput();
-		DrivingInput();
+		if (isHardware) DrivingInput();
 	}
 
 //	public void GameInput(){}
-
+	public void resetKeys(){
+		gasbreak = 0;
+		direction = 0;
+	}
 	public void DevInput(){
 
-		if(Input.GetKeyDown(mf)){
-			if(Move != null){
-//				Move(5f);
-			}
+		if(Input.GetKey(mf)){
+			gasbreak += 1;
 		}		
 
-		if(Input.GetKeyDown(mb)){
-			if(Break != null){
-				Break(-5f);
-			}
+		if(Input.GetKey(mb)){
+			gasbreak -= 1;
 		}
 
-		if(Input.GetKeyDown(hk)){
-			if(Honk != null){
-				Honk();
-			}
+		if (Input.GetKey(ml)) {
+			direction -= 0.5f;
 		}
-		if(Input.GetKeyDown(sl)){
-			if(SignalLeft != null){
-				SignalLeft();
-			}
+
+		if (Input.GetKey(mr)) {
+			direction += 0.5f;
 		}
-		if(Input.GetKeyDown(sr)){
-			if(SignalRight != null){
-				SignalRight();
-			}
+
+		if (Move != null) {
+			Move(direction,gasbreak);
 		}
 	}
 
@@ -84,17 +88,17 @@ public class Input_Manager : MonoBehaviour {
 			LogitechGSDK.DIJOYSTATE2ENGINES rec;
 			rec = LogitechGSDK.LogiGetStateUnity(0);
 
-			steeringWheelIntensity = Mathf.Lerp(/*wheelDegrees/2*/1,/*-wheelDegrees/2*/-1,(-rec.lX /32767f + 1f)/2f);
+			direction = Mathf.Lerp(/*wheelDegrees/2*/1,/*-wheelDegrees/2*/-1,(-rec.lX /32767f + 1f)/2f);
 			steeringWheelDegrees = Mathf.Lerp(wheelDegrees/2,-wheelDegrees/2,(-rec.lX /32767f + 1f)/2f);
 			gasPedal = Mathf.Lerp(0,1,( -rec.lY/32767f + 1)/2 );
 			breakPedal = Mathf.Lerp(0,-1,( -rec.lRz/32767f + 1)/2);
 			clutchPedal = Mathf.Lerp(0,1,( -rec.rglSlider[1]/32767f + 1)/2);
-			float gasbreak = gasPedal + breakPedal;
+			gasbreak = gasPedal + breakPedal;
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}
-			if(Move != null && (gasPedal > 0 ||  breakPedal > 0 || steeringWheelIntensity != 0)){
-				Move(steeringWheelIntensity,gasbreak);
+			if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || steeringWheelIntensity != 0)){
+				Move(direction,gasbreak);
 
 			}
 //			if(Break != null && breakPedal > 0){

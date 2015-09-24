@@ -16,11 +16,6 @@ namespace UnityStandardAssets.Vehicles.Car
         KPH
     }
 
-	internal enum TransmissionType {
-		Manual,
-		Automatic
-	}
-
     public class CarController : MonoBehaviour
     {
         [SerializeField] private CarDriveType m_CarDriveType = CarDriveType.FourWheelDrive;
@@ -41,15 +36,7 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] private float m_RevRangeBoundary = 1f;
         [SerializeField] private float m_SlipLimit;
         [SerializeField] private float m_BrakeTorque;
-		[SerializeField] private TransmissionType m_TransmissionType = TransmissionType.Automatic;
-		[SerializeField] private float[] m_GearRatios = new float[6];
-		[SerializeField] private float m_FinalRatio;
-		[SerializeField] private float m_MaxRPM;
-		[SerializeField] private float m_MinRPM;
-		[SerializeField] private float m_MaxTorque;
-		[SerializeField] private float m_TireCircumference;
 
-		private float m_RPM;
         private Quaternion[] m_WheelMeshLocalRotations;
         private Vector3 m_Prevpos, m_Pos;
         private float m_SteerAngle;
@@ -79,90 +66,11 @@ namespace UnityStandardAssets.Vehicles.Car
             m_WheelColliders[0].attachedRigidbody.centerOfMass = m_CentreOfMassOffset;
 
             m_MaxHandbrakeTorque = float.MaxValue;
-			m_RPM = m_MinRPM;
-			if (m_TransmissionType == TransmissionType.Manual)
-				m_GearNum = 1;
+
             m_Rigidbody = GetComponent<Rigidbody>();
             m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl*m_FullTorqueOverAllWheels);
         }
 
-		private float GetTorquefromRPM() {
-			float t = 0;
-			if (m_GearNum < 0)
-				t = 0;
-			else 
-				t = Mathf.SmoothStep (0, m_MaxTorque, Math.Abs (m_RPM / m_MaxRPM)) * m_GearRatios[m_GearNum] * m_FinalRatio;
-			return t;
-		}
-
-		public float GetRPM(){
-			return m_RPM;
-		}
-
-		private float GetMinTorquefromRPM() {
-			float t = 0;
-			if (m_GearNum < 0)
-				t = 0;
-			else 
-				t = Mathf.SmoothStep (0, m_MaxTorque, Math.Abs (m_MinRPM / m_MaxRPM)) * m_GearRatios[m_GearNum] * m_FinalRatio;
-			return t;
-		}
-
-		public void SetRPM() {
-			m_RPM = CurrentSpeed / (m_TireCircumference / 60f) * m_GearRatios[m_GearNum] * m_FinalRatio;
-		}
-
-		private void applyThrottle(float throttle, float brakes) {
-			var thrustTorque = GetTorquefromRPM ()  * throttle;
-			if (m_RPM < m_MinRPM) {
-				m_RPM = m_MinRPM;
-				thrustTorque = GetMinTorquefromRPM();
-			}
-			if (m_RPM > m_MaxRPM) {
-				Debug.Log ("engine overheating");
-				thrustTorque = GetMinTorquefromRPM()*throttle;
-			}
-			switch (m_CarDriveType)
-			{
-			case CarDriveType.FourWheelDrive:
-				for (int i = 0; i < 4; i++)
-				{
-					m_WheelColliders[i].motorTorque = thrustTorque/4f;
-				}
-				break;
-				
-			case CarDriveType.FrontWheelDrive:
-				m_WheelColliders[0].motorTorque = m_WheelColliders[1].motorTorque = thrustTorque/2f;
-				break;
-				
-			case CarDriveType.RearWheelDrive:
-				m_WheelColliders[2].motorTorque = m_WheelColliders[3].motorTorque = thrustTorque/2f;
-				break;
-				
-			}
-			
-			for (int i = 0; i < 4; i++)
-			{
-				if (CurrentSpeed > 5 && Vector3.Angle(transform.forward, m_Rigidbody.velocity) < 50f)
-				{
-					m_WheelColliders[i].brakeTorque = m_BrakeTorque*brakes;
-				}
-				else if (brakes > 0)
-				{
-					m_WheelColliders[i].brakeTorque = 0f;
-					m_WheelColliders[i].motorTorque = -m_ReverseTorque*brakes;
-				}
-			}
-		}
-
-		private void SetGear(int n) {
-			m_GearNum = n;
-			if (n < -1)
-				m_GearNum = -1;
-			else if (n > 5)
-				m_GearNum = 5;
-
-		}
 
         private void GearChanging()
         {
@@ -242,14 +150,7 @@ namespace UnityStandardAssets.Vehicles.Car
             m_WheelColliders[1].steerAngle = m_SteerAngle;
 
             SteerHelper();
-            if (m_TransmissionType == TransmissionType.Automatic)
-				ApplyDrive (accel, footbrake);
-			else {
-				SetRPM();
-				Debug.Log("before " + GetRPM());
-				Debug.Log("after " + GetRPM());
-				applyThrottle(accel, footbrake);
-			}
+            ApplyDrive(accel, footbrake);
             CapSpeed();
 
             //Set the handbrake.
@@ -261,14 +162,13 @@ namespace UnityStandardAssets.Vehicles.Car
                 m_WheelColliders[3].brakeTorque = hbTorque;
             }
 
-			if(m_TransmissionType == TransmissionType.Automatic) {
-				CalculateRevs ();
-				GearChanging ();
-			}
+
+            CalculateRevs();
+            GearChanging();
+
             AddDownForce();
             CheckForWheelSpin();
             TractionControl();
-			Debug.Log ("speed " + m_Rigidbody.velocity.magnitude*3.6f);
         }
 
 
