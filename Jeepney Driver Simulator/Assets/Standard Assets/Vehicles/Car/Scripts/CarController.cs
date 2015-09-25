@@ -45,13 +45,16 @@ namespace UnityStandardAssets.Vehicles.Car
 		[SerializeField] private float[] m_GearRatios = new float[6];
 		[SerializeField] private float m_FinalRatio;
 		[SerializeField] private float m_MaxRPM;
+		[SerializeField] private float m_HardRPM;
 		[SerializeField] private float m_MinRPM;
+		[SerializeField] private float m_StartTorque;
 		[SerializeField] private float m_MaxTorque;
 		[SerializeField] private float m_MinTorque;
 		[SerializeField] private float m_FallOffTorque;
 		[SerializeField] private float m_TireCircumference;
 
 		private float m_RPM;
+		public float m_OutputTorque;
         private Quaternion[] m_WheelMeshLocalRotations;
         private Vector3 m_Prevpos, m_Pos;
         private float m_SteerAngle;
@@ -65,7 +68,7 @@ namespace UnityStandardAssets.Vehicles.Car
         public bool Skidding { get; private set; }
         public float BrakeInput { get; private set; }
         public float CurrentSteerAngle{ get { return m_SteerAngle; }}
-        public float CurrentSpeed{ get { return m_Rigidbody.velocity.magnitude; }}
+		public float CurrentSpeed{ get { return m_Rigidbody.velocity.magnitude*3.6f; }}
         public float MaxSpeed{get { return m_Topspeed; }}
         public float Revs { get; private set; }
         public float AccelInput { get; private set; }
@@ -81,55 +84,76 @@ namespace UnityStandardAssets.Vehicles.Car
             m_WheelColliders[0].attachedRigidbody.centerOfMass = m_CentreOfMassOffset;
 
             m_MaxHandbrakeTorque = float.MaxValue;
-			m_RPM = m_MinRPM;
+
 			if (m_TransmissionType == TransmissionType.Manual)
 				m_GearNum = 1;
             m_Rigidbody = GetComponent<Rigidbody>();
             m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl*m_FullTorqueOverAllWheels);
+			m_RPM = m_MinRPM;
         }
 
 		private float GetTorquefromRPM(float x) {
-			float m = Math.Abs (m_RPM / m_MaxRPM);
-			if (m < 0.15) {
-				return Mathf.Lerp(0, m_MinTorque, m/0.15f);
-			}
-			else if (m < 0.66) {
-				return Mathf.SmoothStep	(m_MinTorque, m_MaxTorque, Mathf.SmoothStep(m_MinTorque, m_MaxTorque, m/0.66f));
-			} else {
-				return Mathf.SmoothStep	(m_MaxTorque, m_FallOffTorque, m);
-			}
-
+			float m = Math.Abs (x / m_MaxRPM);
+			// start point, peak point, fallout point
+			float sp = 1000f/m_MaxRPM;
+			float pp = 0.6f;
+			float fp = 1.15f;
+			// torque = a(RPM - peakPoint)^2 + maxTorque)
+			//float a = -1*(m_StartTorque - m_MaxTorque)/(sp*sp - 2 * pp * sp + pp*pp );
+			if (m < sp) {
+				//linear torque
+				return 0; //Mathf.Lerp(0, m_StartTorque, m/sp);
+			}else if (m < pp) {
+				//parabolic torque
+				return Mathf.Lerp(m_StartTorque, m_MaxTorque, CurveFactor((m-sp)/pp-sp));//a*(x-pp)*(x-pp) + m_MaxTorque;
+			}else if (m < fp){
+				//float f = Mathf.SmoothStep(m_MaxTorque, 1, ((m-pp)/(1-pp)*2)/2);
+				return Mathf.Lerp(m_MaxTorque, m_FallOffTorque, (m-pp)/(fp-pp)*(m-pp)/(fp-pp));
+			}else return 0;
 		}
 
-		private float GetTorquefromRPM() {
-			float t = GetTorquefromRPM(m_RPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
-			return t;
-		}
-
-		public float GetRPM(){
-			return m_RPM;
-		}
-
-		private float GetMinTorquefromRPM() {
-			float t = GetTorquefromRPM(m_MinRPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
-			return t;
-		}
+//		public void SetTorquefromRPM() {
+//			if(m_RPM < m_MinRPM || m_GearNum < 0)
+//				if(m_GearNum < 0)
+//					m_OutputTorque = GetTorquefromRPM(m_MinRPM) * m_GearRatios[1] * m_FinalRatio;
+//				else
+//					m_OutputTorque = GetTorquefromRPM(m_MinRPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
+//			else
+//				m_OutputTorque = GetTorquefromRPM(m_RPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
+//		}
 
 		public void SetRPM() {
-			m_RPM = CurrentSpeed / (m_TireCircumference / 60f) * m_GearRatios[m_GearNum] * m_FinalRatio;
+			if(m_RPM > m_HardRPM){m_RPM = m_HardRPM; return; }
+			if(m_GearNum < 0){
+				if( CurrentSpeed < 5f){
+					m_RPM = m_MinRPM;
+				} else {
+					m_OutputTorque = 0;
+					m_RPM = 0;
+				}
+			}else if (CurrentSpeed < 1000f/m_GearRatios[m_GearNum]/m_FinalRatio/60f*m_TireCircumference){
+				m_RPM = m_MinRPM;
+			}else{
+				m_RPM = Math.Abs(CurrentSpeed) / 3.6f * 60f * m_GearRatios[m_GearNum] * m_FinalRatio / m_TireCircumference ;
+			}
+			return;
+		}
+
+		public void TestTorque() {
+			for(int i = 0; i < 4500; i+= 50){
+				Debug.Log(GetTorquefromRPM(i));
+			}
 		}
 
 		private void applyThrottle(float throttle, float brakes) {
-			var thrustTorque = GetTorquefromRPM ()  * throttle;
-			if (m_RPM < m_MinRPM) {
-				m_RPM = m_MinRPM;
-				thrustTorque = GetMinTorquefromRPM();
+			if(m_RPM < m_MinRPM || m_GearNum < 0){
+				if(m_GearNum == -1) m_OutputTorque = 0;
+				else m_OutputTorque = GetTorquefromRPM(m_MinRPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
 			}
-			if (m_RPM > m_MaxRPM) {
-				Debug.Log ("engine overheating");
-				//thrustTorque = GetMinTorquefromRPM()*throttle;
-				m_RPM = m_MaxRPM;
-			}
+			else
+				m_OutputTorque = GetTorquefromRPM(m_RPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
+
+			var thrustTorque =  m_OutputTorque * throttle;
 			if (m_GearNum != -1) {
 				switch (m_CarDriveType) {
 				case CarDriveType.FourWheelDrive:
@@ -161,7 +185,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			}
 		}
 
-		private void SetGear(int n) {
+		public void SetGear(int n) {
 			m_GearNum = n;
 			if (n < -1)
 				m_GearNum = -1;
@@ -191,7 +215,7 @@ namespace UnityStandardAssets.Vehicles.Car
         // simple function to add a curved bias towards 1 for a value in the 0-1 range
         private static float CurveFactor(float factor)
         {
-            return 1 - (1 - factor)*(1 - factor);
+			return 1 - (1 - factor)*(1 - factor)*(1 - factor);
         }
 
 
@@ -248,16 +272,23 @@ namespace UnityStandardAssets.Vehicles.Car
             m_WheelColliders[1].steerAngle = m_SteerAngle;
 
             SteerHelper();
+
             if (m_TransmissionType == TransmissionType.Automatic)
 				ApplyDrive (accel, footbrake);
 			else {
-				SetRPM();
-				Debug.Log("before " + GetRPM());
-				Debug.Log("after " + GetRPM());
-				applyThrottle(accel, footbrake);
-			}
-            CapSpeed();
+				//Debug.Log ("TORQUE1 "+ m_CurrTorque);
 
+				//Debug.Log ("TORQUE2 "+ m_CurrTorque);
+				applyThrottle(accel, footbrake);
+				//Debug.Log ("GEAR " + m_GearNum);
+				//Debug.Log ("RPM " + m_RPM);
+				//Debug.Log ("TORQUE3 "+ m_CurrTorque);
+				//Debug.Log ("Speed " + CurrentSpeed);
+				//Debug.Log ("Brake " + footbrake);
+
+			}
+
+            CapSpeed();
             //Set the handbrake.
             //Assuming that wheels 2 and 3 are the rear wheels.
             if (handbrake > 0f)
@@ -273,8 +304,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			}
             AddDownForce();
             CheckForWheelSpin();
-            TractionControl();
-			Debug.Log ("speed " + m_Rigidbody.velocity.magnitude*3.6f);
+			TractionControl();
         }
 
 
@@ -443,18 +473,29 @@ namespace UnityStandardAssets.Vehicles.Car
 
         private void AdjustTorque(float forwardSlip)
         {
-            if (forwardSlip >= m_SlipLimit && m_CurrentTorque >= 0)
-            {
-                m_CurrentTorque -= 10 * m_TractionControl;
-            }
-            else
-            {
-                m_CurrentTorque += 10 * m_TractionControl;
-                if (m_CurrentTorque > m_FullTorqueOverAllWheels)
-                {
-                    m_CurrentTorque = m_FullTorqueOverAllWheels;
-                }
-            }
+			if(m_TransmissionType == TransmissionType.Manual){
+				if (forwardSlip >= m_SlipLimit && m_OutputTorque >= 0)
+				{
+					m_OutputTorque -= 200 * m_TractionControl;
+				}
+				else if (m_OutputTorque >=0)
+				{
+					m_OutputTorque -= 0.2f* m_OutputTorque;
+				}
+			}else {
+				if (forwardSlip >= m_SlipLimit && m_CurrentTorque >= 0)
+				{
+					m_CurrentTorque -= 10 * m_TractionControl;
+				}
+				else
+				{
+					m_CurrentTorque += 10 * m_TractionControl;
+					if (m_CurrentTorque > m_FullTorqueOverAllWheels)
+					{
+						m_CurrentTorque = m_FullTorqueOverAllWheels;
+					}
+				}
+			}
         }
 
 

@@ -2732,7 +2732,7 @@ GameObject:
   - 114: {fileID: 1642624480}
   - 114: {fileID: 1642624483}
   m_Layer: 8
-  m_Name: q
+  m_Name: Jeep
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2831,28 +2831,33 @@ MonoBehaviour:
   m_MaximumSteerAngle: 90
   m_SteerHelper: 0
   m_TractionControl: 1
-  m_FullTorqueOverAllWheels: 2500
+  m_FullTorqueOverAllWheels: 1000
   m_ReverseTorque: 0
   m_MaxHandbrakeTorque: 0
   m_Downforce: 100
   m_SpeedType: 1
-  m_Topspeed: 160
+  m_Topspeed: 150
   m_RevRangeBoundary: 1
-  m_SlipLimit: .300000012
+  m_SlipLimit: .449999988
   m_BrakeTorque: 10000
   m_TransmissionType: 0
   m_GearRatios:
   - -4.78299999
-  - 5.01599979
-  - 2.67199993
-  - 1.58500004
+  - 4.01599979
+  - 2.57200003
+  - 1.875
   - 1
-  - .870000005
-  m_FinalRatio: 4.32999992
-  m_MaxRPM: 7000
+  - .879999995
+  m_FinalRatio: 4.80000019
+  m_MaxRPM: 4500
+  m_HardRPM: 8000
   m_MinRPM: 1000
-  m_MaxTorque: 1000
-  m_TireCircumference: 1.53999996
+  m_StartTorque: 375
+  m_MaxTorque: 950
+  m_MinTorque: 5
+  m_FallOffTorque: 550
+  m_TireCircumference: 1.96000004
+  m_OutputTorque: 0
 --- !u!54 &1642624482
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2861,7 +2866,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1642624477}
   serializedVersion: 2
-  m_Mass: 2400
+  m_Mass: 1635
   m_Drag: .100000001
   m_AngularDrag: .0500000007
   m_UseGravity: 1

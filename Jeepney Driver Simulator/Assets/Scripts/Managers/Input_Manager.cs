@@ -117,7 +117,7 @@ public class Input_Manager : MonoBehaviour {
 				gear = -1;
 			}
 			
-			if((SetGear!= null && clutchPedal > 0.5f) && prev_gear == -1 || gear == -1){
+			if((SetGear!= null && clutchPedal > 0.5f && prev_gear == -1  && gasPedal < 0.3f)|| gear == -1){
 				SetGear(gear);
 			}
 			prev_gear = gear;
@@ -125,7 +125,7 @@ public class Input_Manager : MonoBehaviour {
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}
-			if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || steeringWheelIntensity != 0)){
+			if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || direction != 0)){
 				Move(direction,gasbreak);
 
 			}
