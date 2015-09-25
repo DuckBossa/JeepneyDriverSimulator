@@ -47,6 +47,8 @@ namespace UnityStandardAssets.Vehicles.Car
 		[SerializeField] private float m_MaxRPM;
 		[SerializeField] private float m_MinRPM;
 		[SerializeField] private float m_MaxTorque;
+		[SerializeField] private float m_MinTorque;
+		[SerializeField] private float m_FallOffTorque;
 		[SerializeField] private float m_TireCircumference;
 
 		private float m_RPM;
@@ -63,7 +65,7 @@ namespace UnityStandardAssets.Vehicles.Car
         public bool Skidding { get; private set; }
         public float BrakeInput { get; private set; }
         public float CurrentSteerAngle{ get { return m_SteerAngle; }}
-        public float CurrentSpeed{ get { return m_Rigidbody.velocity.magnitude*2.23693629f; }}
+        public float CurrentSpeed{ get { return m_Rigidbody.velocity.magnitude; }}
         public float MaxSpeed{get { return m_Topspeed; }}
         public float Revs { get; private set; }
         public float AccelInput { get; private set; }
@@ -86,12 +88,21 @@ namespace UnityStandardAssets.Vehicles.Car
             m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl*m_FullTorqueOverAllWheels);
         }
 
+		private float GetTorquefromRPM(float x) {
+			float m = Math.Abs (m_RPM / m_MaxRPM);
+			if (m < 0.15) {
+				return Mathf.Lerp(0, m_MinTorque, m/0.15f);
+			}
+			else if (m < 0.66) {
+				return Mathf.SmoothStep	(m_MinTorque, m_MaxTorque, Mathf.SmoothStep(m_MinTorque, m_MaxTorque, m/0.66f));
+			} else {
+				return Mathf.SmoothStep	(m_MaxTorque, m_FallOffTorque, m);
+			}
+
+		}
+
 		private float GetTorquefromRPM() {
-			float t = 0;
-			if (m_GearNum < 0)
-				t = 0;
-			else 
-				t = Mathf.SmoothStep (0, m_MaxTorque, Math.Abs (m_RPM / m_MaxRPM)) * m_GearRatios[m_GearNum] * m_FinalRatio;
+			float t = GetTorquefromRPM(m_RPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
 			return t;
 		}
 
@@ -100,22 +111,12 @@ namespace UnityStandardAssets.Vehicles.Car
 		}
 
 		private float GetMinTorquefromRPM() {
-			float t = 0;
-			if (m_GearNum < 0)
-				t = 0;
-			else 
-				t = Mathf.SmoothStep (0, m_MaxTorque, Math.Abs (m_MinRPM / m_MaxRPM)) * m_GearRatios[m_GearNum] * m_FinalRatio;
+			float t = GetTorquefromRPM(m_MinRPM) * m_GearRatios[m_GearNum] * m_FinalRatio;
 			return t;
 		}
 
 		public void SetRPM() {
-			if(m_GearNum < 0){
-				m_RPM = m_MinRPM;
-			}
-			else{
-				m_RPM = CurrentSpeed / (m_TireCircumference / 60f) * m_GearRatios[m_GearNum] * m_FinalRatio;
-			}
-
+			m_RPM = CurrentSpeed / (m_TireCircumference / 60f) * m_GearRatios[m_GearNum] * m_FinalRatio;
 		}
 
 		private void applyThrottle(float throttle, float brakes) {
@@ -125,28 +126,27 @@ namespace UnityStandardAssets.Vehicles.Car
 				thrustTorque = GetMinTorquefromRPM();
 			}
 			if (m_RPM > m_MaxRPM) {
-//				Debug.Log ("engine overheating");
-				thrustTorque = GetMinTorquefromRPM()*throttle;
+				Debug.Log ("engine overheating");
+				//thrustTorque = GetMinTorquefromRPM()*throttle;
+				m_RPM = m_MaxRPM;
 			}
-			switch (m_CarDriveType)
-			{
-			case CarDriveType.FourWheelDrive:
-				for (int i = 0; i < 4; i++)
-				{
-					m_WheelColliders[i].motorTorque = thrustTorque/4f;
+			if (m_GearNum != -1) {
+				switch (m_CarDriveType) {
+				case CarDriveType.FourWheelDrive:
+					for (int i = 0; i < 4; i++) {
+						m_WheelColliders [i].motorTorque = thrustTorque / 4f;
+					}
+					break;
+				
+				case CarDriveType.FrontWheelDrive:
+					m_WheelColliders [0].motorTorque = m_WheelColliders [1].motorTorque = thrustTorque / 2f;
+					break;
+				
+				case CarDriveType.RearWheelDrive:
+					m_WheelColliders [2].motorTorque = m_WheelColliders [3].motorTorque = thrustTorque / 2f;
+					break;
 				}
-				break;
-				
-			case CarDriveType.FrontWheelDrive:
-				m_WheelColliders[0].motorTorque = m_WheelColliders[1].motorTorque = thrustTorque/2f;
-				break;
-				
-			case CarDriveType.RearWheelDrive:
-				m_WheelColliders[2].motorTorque = m_WheelColliders[3].motorTorque = thrustTorque/2f;
-				break;
-				
 			}
-			
 			for (int i = 0; i < 4; i++)
 			{
 				if (CurrentSpeed > 5 && Vector3.Angle(transform.forward, m_Rigidbody.velocity) < 50f)
@@ -161,7 +161,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			}
 		}
 
-		public void SetGear(int n) {
+		private void SetGear(int n) {
 			m_GearNum = n;
 			if (n < -1)
 				m_GearNum = -1;
@@ -253,8 +253,8 @@ namespace UnityStandardAssets.Vehicles.Car
 			else {
 				SetRPM();
 				Debug.Log("before " + GetRPM());
-				applyThrottle(accel, footbrake);
 				Debug.Log("after " + GetRPM());
+				applyThrottle(accel, footbrake);
 			}
             CapSpeed();
 
@@ -274,7 +274,7 @@ namespace UnityStandardAssets.Vehicles.Car
             AddDownForce();
             CheckForWheelSpin();
             TractionControl();
-//			Debug.Log ("speed " + m_Rigidbody.velocity.magnitude*3.6f);
+			Debug.Log ("speed " + m_Rigidbody.velocity.magnitude*3.6f);
         }
 
 
