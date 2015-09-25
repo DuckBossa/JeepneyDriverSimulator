@@ -11,8 +11,8 @@ public class Input_Manager : MonoBehaviour {
 	public static event Action Honk; //one of the buttons
 	public static event Action SignalLeft; //left paddle
 	public static event Action SignalRight; // right paddle
-	public static event Action<int> ReceivePay; //hydra
-
+	public static event Action Payment;	
+	//Logitech G27
 	LogitechGSDK.LogiControllerPropertiesData properties;
 	
 	//Dev
@@ -31,13 +31,19 @@ public class Input_Manager : MonoBehaviour {
 	private float breakPedal;
 	private float clutchPedal;
 
+
 	private float gasbreak;
 	private float direction;
+	private int prev_gear;
 
-	private bool isHardware;
+	public bool isHardware;
+
 
 	public void Start(){
-		if (isHardware) SetupSteeringWheel();
+		if (isHardware){
+			SetupSteeringWheel();
+		} 
+		prev_gear = -2;
 	}
 
 	private void SetupSteeringWheel(){
@@ -49,8 +55,10 @@ public class Input_Manager : MonoBehaviour {
 
 	public void FixedUpdate(){
 		resetKeys ();
-		DevInput();
-		if (isHardware) DrivingInput();
+		DrivingInput();
+		RazerInput();
+//		if (isHardware) DrivingInput();
+//		else DevInput();
 	}
 
 //	public void GameInput(){}
@@ -58,7 +66,7 @@ public class Input_Manager : MonoBehaviour {
 		gasbreak = 0;
 		direction = 0;
 	}
-	public void DevInput(){
+	private void DevInput(){
 
 		if(Input.GetKey(mf)){
 			gasbreak += 1;
@@ -81,8 +89,11 @@ public class Input_Manager : MonoBehaviour {
 		}
 	}
 
+	private void RazerInput(){
 
-	public void DrivingInput(){
+	}
+
+	private void DrivingInput(){
 		if(LogitechGSDK.LogiUpdate() && LogitechGSDK.LogiIsConnected(0)){
 			LogitechGSDK.LogiControllerPropertiesData actualProperties = new LogitechGSDK.LogiControllerPropertiesData();
 			LogitechGSDK.DIJOYSTATE2ENGINES rec;
@@ -94,6 +105,23 @@ public class Input_Manager : MonoBehaviour {
 			breakPedal = Mathf.Lerp(0,-1,( -rec.lRz/32767f + 1)/2);
 			clutchPedal = Mathf.Lerp(0,1,( -rec.rglSlider[1]/32767f + 1)/2);
 			gasbreak = gasPedal + breakPedal;
+			int gear = -1;
+			for(int i = 8; i < 14; i++){
+				if(rec.rgbButtons[i] == 128){
+					gear = i - 7;
+					if(gear == 6){
+						gear = 0;
+					}
+					break;
+				}
+				gear = -1;
+			}
+			
+			if((SetGear!= null && clutchPedal > 0.5f) && prev_gear == -1 || gear == -1){
+				SetGear(gear);
+			}
+			prev_gear = gear;
+
 			if(Steering != null){
 				Steering(steeringWheelDegrees);
 			}
@@ -101,9 +129,7 @@ public class Input_Manager : MonoBehaviour {
 				Move(direction,gasbreak);
 
 			}
-//			if(Break != null && breakPedal > 0){
-//				Break(breakPedal);
-//			}
+
 
 
 		}

@@ -109,7 +109,13 @@ namespace UnityStandardAssets.Vehicles.Car
 		}
 
 		public void SetRPM() {
-			m_RPM = CurrentSpeed / (m_TireCircumference / 60f) * m_GearRatios[m_GearNum] * m_FinalRatio;
+			if(m_GearNum < 0){
+				m_RPM = m_MinRPM;
+			}
+			else{
+				m_RPM = CurrentSpeed / (m_TireCircumference / 60f) * m_GearRatios[m_GearNum] * m_FinalRatio;
+			}
+
 		}
 
 		private void applyThrottle(float throttle, float brakes) {
@@ -119,7 +125,7 @@ namespace UnityStandardAssets.Vehicles.Car
 				thrustTorque = GetMinTorquefromRPM();
 			}
 			if (m_RPM > m_MaxRPM) {
-				Debug.Log ("engine overheating");
+//				Debug.Log ("engine overheating");
 				thrustTorque = GetMinTorquefromRPM()*throttle;
 			}
 			switch (m_CarDriveType)
@@ -155,7 +161,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			}
 		}
 
-		private void SetGear(int n) {
+		public void SetGear(int n) {
 			m_GearNum = n;
 			if (n < -1)
 				m_GearNum = -1;
@@ -247,8 +253,8 @@ namespace UnityStandardAssets.Vehicles.Car
 			else {
 				SetRPM();
 				Debug.Log("before " + GetRPM());
-				Debug.Log("after " + GetRPM());
 				applyThrottle(accel, footbrake);
+				Debug.Log("after " + GetRPM());
 			}
             CapSpeed();
 
@@ -268,7 +274,7 @@ namespace UnityStandardAssets.Vehicles.Car
             AddDownForce();
             CheckForWheelSpin();
             TractionControl();
-			Debug.Log ("speed " + m_Rigidbody.velocity.magnitude*3.6f);
+//			Debug.Log ("speed " + m_Rigidbody.velocity.magnitude*3.6f);
         }
 
 

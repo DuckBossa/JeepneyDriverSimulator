@@ -1,0 +1,161 @@
+fileFormatVersion: 2
+guid: 2f9253ed05876c345a3261b9b1e049cb
+timeCreated: 1443155334
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Brake Pedal
+    100002: Bumper
+    100004: Camera
+    100006: Cube.000
+    100008: Cube.001
+    100010: Gas Pedal
+    100012: Grill
+    100014: Jeep Body
+    100016: //RootNode
+    100018: Lamp
+    100020: Lamp L
+    100022: Lamp R
+    100024: Lamp.001
+    100026: Lamp.002
+    100028: Lamp.003
+    100030: Steering Wheel
+    100032: Tray
+    100034: Tray.001
+    100036: Wheel BL
+    100038: Wheel BR
+    100040: Wheel FL
+    100042: Wheel FR
+    400000: Brake Pedal
+    400002: Bumper
+    400004: Camera
+    400006: Cube.000
+    400008: Cube.001
+    400010: Gas Pedal
+    400012: Grill
+    400014: Jeep Body
+    400016: //RootNode
+    400018: Lamp
+    400020: Lamp L
+    400022: Lamp R
+    400024: Lamp.001
+    400026: Lamp.002
+    400028: Lamp.003
+    400030: Steering Wheel
+    400032: Tray
+    400034: Tray.001
+    400036: Wheel BL
+    400038: Wheel BR
+    400040: Wheel FL
+    400042: Wheel FR
+    2300000: Brake Pedal
+    2300002: Bumper
+    2300004: Cube.000
+    2300006: Cube.001
+    2300008: Gas Pedal
+    2300010: Grill
+    2300012: Jeep Body
+    2300014: Lamp L
+    2300016: Lamp R
+    2300018: Steering Wheel
+    2300020: Tray
+    2300022: Tray.001
+    2300024: Wheel BL
+    2300026: Wheel BR
+    2300028: Wheel FL
+    2300030: Wheel FR
+    3300000: Brake Pedal
+    3300002: Bumper
+    3300004: Cube.000
+    3300006: Cube.001
+    3300008: Gas Pedal
+    3300010: Grill
+    3300012: Jeep Body
+    3300014: Lamp L
+    3300016: Lamp R
+    3300018: Steering Wheel
+    3300020: Tray
+    3300022: Tray.001
+    3300024: Wheel BL
+    3300026: Wheel BR
+    3300028: Wheel FL
+    3300030: Wheel FR
+    4300000: Tray.001
+    4300002: Gas Pedal
+    4300004: Brake Pedal
+    4300006: Tray
+    4300008: Jeep Body
+    4300010: Grill
+    4300012: Lamp R
+    4300014: Bumper
+    4300016: Wheel FL
+    4300018: Lamp L
+    4300020: Wheel FR
+    4300022: Wheel BR
+    4300024: Wheel BL
+    4300026: Steering Wheel
+    4300028: Cube.000
+    4300030: Cube.001
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

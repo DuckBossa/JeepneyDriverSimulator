@@ -18,23 +18,30 @@ namespace UnityStandardAssets.Vehicles.Car{
 		public void OnEnable(){
 			Input_Manager.Move += Move;
 			Input_Manager.Steering += SetWheel;
+			Input_Manager.SetGear += SetGear;
 		}
 		
 		
 		public void OnDisable(){
 			Input_Manager.Move -= Move;
 			Input_Manager.Steering -= SetWheel;
+			Input_Manager.SetGear -= SetGear;
 		}
 		
 		void Move (float steer,float gas){
 			cc.Move(steer,gas,gas,0);
-			Debug.Log("moving " + gas + " " + steer);
+//			Debug.Log("moving " + gas + " " + steer);
 		}
 		
 		void SetWheel(float degrees){
-			Debug.Log(degrees);
+//			Debug.Log(degrees);
 			steeringWheel.transform.localRotation = Quaternion.Euler(new Vector3 (0, 0, degrees));
 			
+		}
+
+		void SetGear(int g){
+			Debug.Log ("GEAR " + g);
+			cc.SetGear(g);
 		}
 	}
 

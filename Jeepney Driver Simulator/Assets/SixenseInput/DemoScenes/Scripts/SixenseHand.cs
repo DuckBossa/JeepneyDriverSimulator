@@ -34,10 +34,12 @@ public class SixenseHand : MonoBehaviour
 			m_controller = SixenseInput.GetController( m_hand );
 		}
 
-		else if ( m_animator != null )
-		{
-			UpdateHandAnimation();
-		}
+
+
+//		else if ( m_animator != null )
+//		{
+//			UpdateHandAnimation();
+//		}
 	}
 	
 	
@@ -58,6 +60,7 @@ public class SixenseHand : MonoBehaviour
 		if ( m_hand == SixenseHands.RIGHT ? m_controller.GetButton(SixenseButtons.TWO) : m_controller.GetButton(SixenseButtons.ONE)  )
 		{
 			m_animator.SetBool( "GripBall", true );
+
 		}
 		else
 		{
@@ -68,6 +71,7 @@ public class SixenseHand : MonoBehaviour
 		if ( m_hand == SixenseHands.RIGHT ? m_controller.GetButton(SixenseButtons.THREE) : m_controller.GetButton(SixenseButtons.FOUR) )
 		{
 			m_animator.SetBool( "HoldBook", true );
+
 		}
 		else
 		{
