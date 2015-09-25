@@ -13,7 +13,7 @@ namespace UnityStandardAssets.Vehicles.Car{
 
 		public void Start(){
 			cc = GetComponent<CarController>();
-			cc.TestTorque();
+//			cc.TestTorque();
 		}
 
 		public void OnEnable(){
@@ -46,7 +46,7 @@ namespace UnityStandardAssets.Vehicles.Car{
 
 		public void Update(){
 			cc.SetRPM();
-			Debug.Log ("SPEED " + cc.CurrentSpeed);
+//			Debug.Log ("SPEED " + cc.CurrentSpeed);
 		}
 	}
 	

@@ -6,7 +6,7 @@ using System;
 
 public class RazerHydraInput : MonoBehaviour 
 {
-	public static event Action<Ray> ReceivePay; //hydra
+	public static event Action<float> GetChange; //hydra
 
 	SixenseHand m_hand;
 	
@@ -18,7 +18,7 @@ public class RazerHydraInput : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		m_hand = GetComponentInChildren<SixenseHand>();
+		m_hand = GetComponent<SixenseHand>();
 	}
 	
 	
@@ -60,15 +60,6 @@ public class RazerHydraInput : MonoBehaviour
 		{
 			hand.transform.localPosition = ( hand.m_controller.Position - m_baseOffset ) * m_sensitivity;
 			hand.transform.localRotation = hand.m_controller.Rotation * hand.InitialRotation;
-			Debug.DrawRay(m_hand.gameObject.transform.position,m_hand.gameObject.transform.forward,Color.magenta);
-			if(m_hand.m_controller.GetButtonDown(SixenseButtons.TRIGGER))
-			{
-				if(ReceivePay != null)
-				{
-					ReceivePay(new Ray(m_hand.gameObject.transform.position,m_hand.gameObject.transform.forward));
-				}	
-			}
-			
 		}
 		
 		else
@@ -78,7 +69,16 @@ public class RazerHydraInput : MonoBehaviour
 			hand.transform.localRotation  = hand.InitialRotation;
 		}
 	}
-	
+
+	void OnTriggerStay(Collider other){
+		if(m_hand.m_controller.GetButtonDown(SixenseButtons.TRIGGER))
+		{
+			if(GetChange!= null){
+				GetChange(other.gameObject.GetComponent<Money>().value);
+			}
+		}
+	}
+
 	
 	void OnGUI()
 	{
