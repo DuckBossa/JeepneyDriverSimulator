@@ -1538,7 +1538,9 @@ MonoBehaviour:
   m_FinalRatio: 4.32999992
   m_MaxRPM: 7000
   m_MinRPM: 1000
-  m_MaxTorque: 650
+  m_MaxTorque: 1300
+  m_MinTorque: 100
+  m_FallOffTorque: 20
   m_TireCircumference: 1.53999996
 --- !u!54 &1642624482
 Rigidbody:
