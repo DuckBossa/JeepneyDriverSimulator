@@ -267,7 +267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &102548652
 Transform:
   m_ObjectHideFlags: 0
@@ -308,7 +308,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 148075919}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 3.31999993, z: .529999971}
+  m_LocalPosition: {x: -0, y: 3.31999993, z: .670000017}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1642624478}
@@ -348,9 +348,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 148075919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fea300bd739fe64eb738eff2e32dd92, type: 3}
+  m_Script: {fileID: 11500000, guid: f29f831e662eae04b976767f9f6eb6c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  INITIAL_MONEY: 50
+  JEEPNEY_FARE: 8
+  MoneyBoxes: {fileID: 102548651}
 --- !u!1 &153007634
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +364,6 @@ GameObject:
   - 4: {fileID: 153007636}
   - 114: {fileID: 153007635}
   - 114: {fileID: 153007637}
-  - 114: {fileID: 153007638}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -387,6 +389,7 @@ MonoBehaviour:
   hk: 104
   sl: 60
   sr: 62
+  em: 101
   wheelDegrees: 900
   isHardware: 0
 --- !u!4 &153007636
@@ -412,19 +415,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da3d4409553fa445b53856335d11976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &153007638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 153007634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f29f831e662eae04b976767f9f6eb6c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  INITIAL_MONEY: 50
-  JEEPNEY_FARE: 8
 --- !u!1 &188343262
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,7 +648,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 298725184}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.509000003, y: 3.4000001, z: 2.88400006}
+  m_LocalPosition: {x: -.509000003, y: 3.61800003, z: 2.88400006}
   m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
   m_Children: []
   m_Father: {fileID: 102548652}
@@ -743,8 +733,8 @@ GameObject:
   - 4: {fileID: 306409521}
   - 95: {fileID: 306409523}
   - 114: {fileID: 306409522}
-  - 65: {fileID: 306409524}
   - 114: {fileID: 306409525}
+  - 135: {fileID: 306409524}
   m_Layer: 8
   m_Name: Hand - Right
   m_TagString: Untagged
@@ -759,8 +749,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 306409520}
   m_LocalRotation: {x: 0, y: 0, z: -.707106829, w: .707106829}
-  m_LocalPosition: {x: .0799999982, y: .0670000017, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: .0820000023, y: .0670000017, z: -.264999986}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 558406269}
   - {fileID: 1733298354}
@@ -797,18 +787,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!65 &306409524
-BoxCollider:
+--- !u!135 &306409524
+SphereCollider:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6591346, guid: 0e7ee4df08df88c4880f43398f9ad2c2,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 306409520}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .100000001, y: .100000001, z: .100000001}
+  m_Radius: .100000001
   m_Center: {x: -.0299999993, y: 0, z: .100000001}
 --- !u!114 &306409525
 MonoBehaviour:
@@ -2746,7 +2735,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1642624477}
   m_LocalRotation: {x: 0, y: -.703795493, z: 0, w: .710402727}
-  m_LocalPosition: {x: -136, y: .5, z: -214}
+  m_LocalPosition: {x: -136, y: .5, z: -224.119995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 290388542}
@@ -3487,6 +3476,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1932876947}
+  - 65: {fileID: 1932876948}
   m_Layer: 8
   m_Name: Jeep Mesh
   m_TagString: Untagged
@@ -3507,6 +3497,18 @@ Transform:
   - {fileID: 1710570638}
   m_Father: {fileID: 1642624478}
   m_RootOrder: 5
+--- !u!65 &1932876948
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1932876946}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 1, z: 10}
+  m_Center: {x: 0, y: 1.59000003, z: 0}
 --- !u!1 &1953016217
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,8 @@ public class Input_Manager : MonoBehaviour {
 	public static event Action Honk; //one of the buttons
 	public static event Action SignalLeft; //left paddle
 	public static event Action SignalRight; // right paddle
-	public static event Action Payment;	
+	public static event Action EmbarkPassenger;//should be in the passenger manager
+
 	//Logitech G27
 	LogitechGSDK.LogiControllerPropertiesData properties;
 	
@@ -23,6 +24,7 @@ public class Input_Manager : MonoBehaviour {
 	public KeyCode hk = KeyCode.H;
 	public KeyCode sl = KeyCode.Less;
 	public KeyCode sr = KeyCode.Greater;
+	public KeyCode em = KeyCode.E;
 	public int wheelDegrees = 900;
 
 	private float steeringWheelDegrees;
@@ -30,7 +32,7 @@ public class Input_Manager : MonoBehaviour {
 	private float gasPedal;
 	private float breakPedal;
 	private float clutchPedal;
-
+	private int gear;
 
 	private float gasbreak;
 	private float direction;
@@ -40,28 +42,53 @@ public class Input_Manager : MonoBehaviour {
 
 
 	public void Start(){
-		if (isHardware){
-			SetupSteeringWheel();
-		} 
+		SetupSteeringWheel();
 		prev_gear = -2;
 	}
 
 	private void SetupSteeringWheel(){
 		LogitechGSDK.LogiSteeringInitialize(false);
+//		properties.allowGameSettings = true;
+		properties.forceEnable = true;
+//		properties.overallGain = 80;
+//		properties.springGain = 80;
+//		properties.damperGain = 540;
+		properties.defaultSpringEnabled = true;
+//		properties.defaultSpringGain = 80;
 		properties.wheelRange = wheelDegrees;
 		LogitechGSDK.LogiSetPreferredControllerProperties(properties);
 		steeringWheelDegrees = 0f;
 	}
 
-	public void FixedUpdate(){
+	public void Update(){
 		resetKeys ();
+		//ADD FIXED UPDATE RESOLUTION LISTEN HERE
 		DrivingInput();
-		RazerInput();
+		if(Input.GetKeyDown(em))
+			if(EmbarkPassenger != null)
+				EmbarkPassenger();		
 //		if (isHardware) DrivingInput();
 //		else DevInput();
 	}
 
-//	public void GameInput(){}
+	public void FixedUpdate(){
+		if(LogitechGSDK.LogiIsConnected(0)){
+			if((SetGear!= null && clutchPedal > 0.5f && prev_gear == -1  && gasPedal < 0.3f)|| gear == -1){
+				SetGear(gear);
+			}
+			prev_gear = gear;
+			
+			if(Steering != null){
+				Steering(steeringWheelDegrees);
+			}
+			if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || direction != 0)){
+				Move(direction,gasbreak);
+				
+			}
+		}
+	}
+	
+	//	public void GameInput(){}
 	public void resetKeys(){
 		gasbreak = 0;
 		direction = 0;
@@ -88,10 +115,7 @@ public class Input_Manager : MonoBehaviour {
 			Move(direction,gasbreak);
 		}
 	}
-
-	private void RazerInput(){
-
-	}
+	
 
 	private void DrivingInput(){
 		if(LogitechGSDK.LogiUpdate() && LogitechGSDK.LogiIsConnected(0)){
@@ -105,7 +129,7 @@ public class Input_Manager : MonoBehaviour {
 			breakPedal = Mathf.Lerp(0,-1,( -rec.lRz/32767f + 1)/2);
 			clutchPedal = Mathf.Lerp(0,1,( -rec.rglSlider[1]/32767f + 1)/2);
 			gasbreak = gasPedal + breakPedal;
-			int gear = -1;
+			gear = -1;
 			for(int i = 8; i < 14; i++){
 				if(rec.rgbButtons[i] == 128){
 					gear = i - 7;
@@ -117,19 +141,6 @@ public class Input_Manager : MonoBehaviour {
 				gear = -1;
 			}
 			
-			if((SetGear!= null && clutchPedal > 0.5f && prev_gear == -1  && gasPedal < 0.3f)|| gear == -1){
-				SetGear(gear);
-			}
-			prev_gear = gear;
-
-			if(Steering != null){
-				Steering(steeringWheelDegrees);
-			}
-			if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || direction != 0)){
-				Move(direction,gasbreak);
-
-			}
-
 
 
 		}

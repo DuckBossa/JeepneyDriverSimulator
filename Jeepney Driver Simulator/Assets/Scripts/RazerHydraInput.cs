@@ -10,14 +10,15 @@ public class RazerHydraInput : MonoBehaviour
 
 	SixenseHand m_hand;
 	
-	Vector3	m_baseOffset;
-	float 	m_sensitivity = 0.001f; // Sixense units are in mm
-	bool 	m_bInitialized;
-	
+	Vector3 m_baseOffset;
+	float m_sensitivity = 0.001f; // Sixense units are in mm
+	bool m_bInitialized;
+	bool get_change;
 	
 	// Use this for initialization
 	void Start () 
 	{
+		get_change = false;
 		m_hand = GetComponent<SixenseHand>();
 	}
 	
@@ -46,8 +47,24 @@ public class RazerHydraInput : MonoBehaviour
 			m_baseOffset += m_hand.m_controller.Position;
 			m_baseOffset /= 2;
 		}
+		if(IsControllerActive(m_hand.m_controller) && m_hand.m_controller.GetButtonDown(SixenseButtons.TRIGGER))
+		{
+			Debug.Log ("get ready");
+			get_change = true;	
+		}
 		
-		
+	}
+
+	void FixedUpdate(){
+		if(get_change){
+			Collider[] possible = Physics.OverlapSphere(transform.position + GetComponent<SphereCollider>().center,GetComponent<SphereCollider>().radius, LayerMask.GetMask("Money"));		
+			get_change = false;
+			if(GetChange!= null && possible.Length > 0){
+				Debug.Log(possible[0].name);
+				GetChange(possible[0].gameObject.GetComponent<Money>().value);
+			}
+
+		}
 	}
 	
 	
@@ -69,17 +86,8 @@ public class RazerHydraInput : MonoBehaviour
 			hand.transform.localRotation  = hand.InitialRotation;
 		}
 	}
-
-	void OnTriggerStay(Collider other){
-		if(m_hand.m_controller.GetButtonDown(SixenseButtons.TRIGGER))
-		{
-			if(GetChange!= null){
-				GetChange(other.gameObject.GetComponent<Money>().value);
-			}
-		}
-	}
-
 	
+
 	void OnGUI()
 	{
 		if ( !m_bInitialized )
