@@ -63,12 +63,12 @@ public class Input_Manager : MonoBehaviour {
 	public void Update(){
 		resetKeys ();
 		//ADD FIXED UPDATE RESOLUTION LISTEN HERE
-		DrivingInput();
+		// DrivingInput();
 		if(Input.GetKeyDown(em))
 			if(EmbarkPassenger != null)
 				EmbarkPassenger();		
-//		if (isHardware) DrivingInput();
-//		else DevInput();
+		if (isHardware) DrivingInput();
+		else DevInput();
 	}
 
 	public void FixedUpdate(){
@@ -94,7 +94,6 @@ public class Input_Manager : MonoBehaviour {
 		direction = 0;
 	}
 	private void DevInput(){
-
 		if(Input.GetKey(mf)){
 			gasbreak += 1;
 		}		
@@ -112,8 +111,8 @@ public class Input_Manager : MonoBehaviour {
 		}
 
 		if (Move != null) {
-			Move(direction,gasbreak);
-		}
+			Move(direction, gasbreak);
+		} 
 	}
 	
 
