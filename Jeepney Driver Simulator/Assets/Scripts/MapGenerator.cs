@@ -7,7 +7,7 @@ public class MapGenerator : MonoBehaviour {
 	public GameObject tile;
 	public int tileSize;
 
-	private Transform root;
+	public GameObject environment;
 
 	public void GenerateMap() {
 //		Color[] temp = mapImage.GetPixels(0,0,mapImage.width,mapImage.height );
@@ -16,7 +16,6 @@ public class MapGenerator : MonoBehaviour {
 //			Debug.Log (v);
 //		}
 
-		root = gameObject.transform;
 		short count = 0;
 		int length = Mathf.RoundToInt(Mathf.Sqrt(temp.GetLength(0)));
 		Vector3 start = new Vector3 (-length*tileSize/2, 0, -length*tileSize/2);
@@ -35,14 +34,15 @@ public class MapGenerator : MonoBehaviour {
 
 			if(value.r == 0f){
 				node.GetComponent<Tile>().SwitchTileType(Tile.TileType.Road);
-	
+				node.GetComponent<MeshRenderer>().material.color = Color.gray;
+			
 			}
 			else{
 				node.GetComponent<Tile>().SwitchTileType(Tile.TileType.Pathway);
+				node.GetComponent<MeshRenderer>().material.color = Color.white;
 			}
 
-			Transform x = node.transform;
-			x.SetParent(root);
+			node.transform.SetParent(environment.transform);	
 		}
 //		Debug.Log (count);
 //		Debug.Log (temp.GetLength(0));

@@ -6,7 +6,7 @@ namespace UnitySteer.Behaviors{
 		
 		public SteerForWander wanderScript;
 		public SteerForSphericalObstacles avoidScript;
-		public  ridingScript; // check unity steer component
+//		public  ridingScript; // check unity steer component
 		
 		
 		
@@ -29,10 +29,10 @@ namespace UnitySteer.Behaviors{
 		private void changeState(PedestrianState x){
 			currState = x;
 			wanderScript.gameObject.SetActive (false);
-			ridingScript.gameObject.SetActive (false);
+//			ridingScript.gameObject.SetActive (false);
 			switch (currState) {
 			case PedestrianState.Looking:
-				ridingScript.gameObject.SetActive(true);
+//				ridingScript.gameObject.SetActive(true);
 				break;
 			case PedestrianState.Wander:
 				wanderScript.gameObject.SetActive(true);
