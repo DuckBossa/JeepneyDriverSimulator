@@ -1,51 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
-namespace UnitySteer.Behaviors{
 
-	public class PedestrianController : MonoBehaviour {
-		
-		public SteerForWander wanderScript;
-		public SteerForSphericalObstacles avoidScript;
-//		public  ridingScript; // check unity steer component
-		
-		
-		
-		public void Start(){
-			wanderScript = GetComponent<SteerForWander> ();
-			avoidScript = GetComponent<SteerForSphericalObstacles> ();
+public class PedestrianController : MonoBehaviour {
 
-		}
-		
-		
-		public enum PedestrianState{
-			Wander,
-			Riding,
-			Looking
-		}
-		
-		public PedestrianState currState;
-		
-		
-		private void changeState(PedestrianState x){
-			currState = x;
-			wanderScript.gameObject.SetActive (false);
-//			ridingScript.gameObject.SetActive (false);
-			switch (currState) {
-			case PedestrianState.Looking:
-//				ridingScript.gameObject.SetActive(true);
-				break;
-			case PedestrianState.Wander:
-				wanderScript.gameObject.SetActive(true);
-				break;
-			case PedestrianState.Riding:
-				Debug.Log("STOP");
-				break;
-				
-			}
-		}
-		
+	public MonoBehaviour wanderingScript;
+	public MonoBehaviour searchingScript;
+	public MonoBehaviour ridingScript;
+	public MonoBehaviour departingScript;
+
+	public enum PedestrianState{
+		Wandering,
+		Searching,
+		Riding,
+		Departing
 	}
+	
+	public PedestrianState currState;
 
-
-
+	public void Start (){
+		changeState (PedestrianState.Searching);
+	}
+	
+	public void changeState(PedestrianState x){
+		currState = x;
+		wanderingScript.enabled = false;
+		searchingScript.enabled = false;
+		ridingScript.enabled = false;
+		departingScript.enabled = false;
+		switch (currState) {
+		case PedestrianState.Wandering:
+			wanderingScript.enabled = true;
+			break;
+		case PedestrianState.Searching:
+			searchingScript.enabled = true;
+			break;
+		case PedestrianState.Riding:
+			ridingScript.enabled = true;
+			break;
+		case PedestrianState.Departing:
+			departingScript.enabled = true;
+			break;
+			
+		}
+	}
 }
