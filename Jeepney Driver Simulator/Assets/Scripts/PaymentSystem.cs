@@ -13,6 +13,8 @@ public class PaymentSystem : MonoBehaviour {
 	public float INITIAL_MONEY = 50f;
 	public float JEEPNEY_FARE = 8f;
 	public GameObject MoneyBoxes;
+	public int MAX_CAPACITY = 8;
+	private int currCapacity;
 	private PaymentState currState;
 	private float currMoney;
 	private float currChange;
@@ -24,6 +26,7 @@ public class PaymentSystem : MonoBehaviour {
 		gettingChange = false;
 		currMoney = INITIAL_MONEY;
 		currChange = currPayment = excessChange = 0;
+		currCapacity = 0;
 		currState = PaymentState.NoPayment;
 	}
 
@@ -42,10 +45,16 @@ public class PaymentSystem : MonoBehaviour {
 		Debug.Log (currState + " current money: " + currMoney + " current payment: " + currPayment + " current change : " + currChange + "number of transactions : "  + transactions.Count);
 	}
 
-	private void AddPayment(){
+
+	public bool isFull(){
+		return currCapacity == MAX_CAPACITY;
+	}
+
+	public void AddPayment(){
+		currCapacity++;
 		int randompayment = 0;
 		for(int i = 0; i < 6; i++){
-			randompayment += UnityEngine.Random.Range(1,100);
+			randompayment += UnityEngine.Random.Range(1,50);
 		}
 		randompayment /= 6;
 		float amount = JEEPNEY_FARE + randompayment;
@@ -80,6 +89,12 @@ public class PaymentSystem : MonoBehaviour {
 				currChange -= amount;
 			}
 		}
+	}
+
+
+	public bool CanDisembark(){
+//		return currState == PaymentState.NoPayment;
+		return true;
 	}
 	
 
