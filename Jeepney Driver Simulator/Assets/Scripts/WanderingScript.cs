@@ -18,13 +18,14 @@ namespace UnitySteer.Behaviors{
 			avoidUS = GetComponent<SteerForSphericalObstacles> ();
 		}
 
-		private void Start () {
+		private void OnEnable () {
 			decay = int.MaxValue;
 			wanderUS.enabled = true;
 			avoidUS.enabled = true;
 		}
 
 		private void OnDisable() {
+			decay = int.MaxValue;
 			wanderUS.enabled = false;
 			avoidUS.enabled = false;
 		}
@@ -38,7 +39,7 @@ namespace UnitySteer.Behaviors{
 			if (currTime >= rate) {
 				//Decay to Search
 				decay /= decayMultiplier;
-				Debug.Log (decay);
+//				Debug.Log (decay);
 				if (UnityEngine.Random.Range (0, decay) < changeChance) {
 					GetComponent<PedestrianController>().changeState(PedestrianController.PedestrianState.Searching);
 				}

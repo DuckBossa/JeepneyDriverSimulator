@@ -7,43 +7,52 @@ namespace UnitySteer.Behaviors{
 		public int changeChance = 16;
 		public float rate = 1f;
 		public float searchRadius = 15f;
+		public float stopDistance = 10f;
 
 		private float currTime;
 		private int decay;
 		private SteerForPursuit pursuitUS;
+		private GameObject target;
 		
 		private void Awake () {
 			currTime = 0f;
 			pursuitUS = GetComponent<SteerForPursuit> ();
 		}
 		
-		private void Start () {
+		private void OnEnable () {
+			target = null;
 			decay = int.MaxValue;
 			pursuitUS.enabled = true;
 		}
 		
 		private void OnDisable() {
+			decay = int.MaxValue;
 			pursuitUS.enabled = false;
 		}
 		
 		private void FixedUpdate () {
 
-			SearchJeepney ();
+			if(target != null) WalkingToJeep();
+			else SearchJeepney();
+
 			DecayToWander ();
 		}
 
 		private void SearchJeepney(){
 			Collider[] collided = Physics.OverlapSphere (transform.position, searchRadius, LayerMask.GetMask("Vehicle"));
 			if (collided.Length > 0) {
-				foreach( Collider v in collided){
-					Debug.Log (v.gameObject.name);
-				}
+				target = collided[0].gameObject;
 				pursuitUS.Quarry = collided[0].GetComponentInParent<DetectableObject> ();
 				pursuitUS.enabled = true;
-				GetComponent<PedestrianController> ().changeState (PedestrianController.PedestrianState.Riding);
 			} else {
 				Debug.Log("NO JEEP");
 			}
+		}
+
+		private void WalkingToJeep() {
+			if((target.transform.position - gameObject.transform.position).magnitude < stopDistance)
+				target = null;
+				GetComponent<PedestrianController> ().changeState (PedestrianController.PedestrianState.Riding);
 		}
 
 		private void DecayToWander() {

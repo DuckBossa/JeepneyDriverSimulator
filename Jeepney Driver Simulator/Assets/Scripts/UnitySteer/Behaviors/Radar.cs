@@ -160,6 +160,7 @@ namespace UnitySteer.Behaviors
         public static void AddDetectableObject(DetectableObject obj)
         {
             _knownDetectableObjects[obj.Collider.GetInstanceID()] = obj;
+
         }
 
         /// <summary>

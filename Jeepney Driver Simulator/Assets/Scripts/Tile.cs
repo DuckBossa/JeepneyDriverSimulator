@@ -13,7 +13,6 @@ public class Tile : MonoBehaviour {
 	public void SwitchTileType(TileType x){
 		tt = x;
 		gameObject.layer = LayerMask.NameToLayer(tt.ToString());
-		Debug.Log(gameObject.layer.ToString());
 	}
 
 }

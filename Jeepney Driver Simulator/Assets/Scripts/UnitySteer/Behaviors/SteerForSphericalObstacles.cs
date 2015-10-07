@@ -111,6 +111,8 @@ namespace UnitySteer.Behaviors
             Profiler.BeginSample("Accumulate spherical obstacle influences");
             for (var i = 0; i < Vehicle.Radar.Obstacles.Count; i++)
             {
+				if(i > 2) break;
+
                 var sphere = Vehicle.Radar.Obstacles[i];
                 if (sphere == null || sphere.Equals(null))
                     continue; // In case the object was destroyed since we cached it

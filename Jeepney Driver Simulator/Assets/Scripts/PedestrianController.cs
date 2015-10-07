@@ -18,7 +18,7 @@ public class PedestrianController : MonoBehaviour {
 	public PedestrianState currState;
 
 	public void Start (){
-		changeState (PedestrianState.Searching);
+		changeState (PedestrianState.Wandering);
 	}
 	
 	public void changeState(PedestrianState x){

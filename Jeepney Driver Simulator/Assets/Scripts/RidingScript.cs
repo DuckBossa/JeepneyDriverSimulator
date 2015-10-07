@@ -6,18 +6,17 @@ public class RidingScript : MonoBehaviour {
 	public List<GameObject> positions =  new List<GameObject>();
 	public Transform pedestrian_parent;
 	public Transform pedestrian_drop;
-	public GameObject test;
 	private Stack<GameObject> seated = new Stack<GameObject>();
 	PaymentSystem ps;
 	DistanceAccumulator da;
-	void Start () {
+	void Awake () {
 
 		ps = GetComponent<PaymentSystem>();
 		da = GetComponent<DistanceAccumulator>();
-		AddPassenger(test);
 	}
 
 	public void AddPassenger(GameObject passenger){
+		Debug.Log(ps == null);
 		if(!ps.isFull()){
 			passenger.GetComponent<CapsuleCollider>().enabled = false;
 			Destroy(passenger.GetComponent<Rigidbody>());
@@ -29,7 +28,7 @@ public class RidingScript : MonoBehaviour {
 			da.AddPassenger();
 		}
 		else{
-			//WANDER
+			passenger.GetComponent<PedestrianController>().changeState(PedestrianController.PedestrianState.Wandering);
 		}
 	}
 
@@ -37,11 +36,15 @@ public class RidingScript : MonoBehaviour {
 
 	public void DropPassenger(){
 		if(seated.Count > 0){
+			Debug.Log("LOOOOOOOOOOL");
 			GameObject passenger = seated.Pop ();
-			passenger.gameObject.AddComponent<Rigidbody>();
+			Rigidbody pr = passenger.gameObject.AddComponent<Rigidbody>();
+			pr.constraints =  RigidbodyConstraints.FreezeRotation;
 			passenger.gameObject.GetComponent<CapsuleCollider>().enabled = true;
 			passenger.gameObject.transform.SetParent(pedestrian_parent);
 			passenger.gameObject.transform.position = pedestrian_drop.position;
+			passenger.gameObject.transform.rotation = Quaternion.identity;
+			passenger.GetComponent<PedestrianController>().changeState(PedestrianController.PedestrianState.Departing);
 		}
 	}
 	

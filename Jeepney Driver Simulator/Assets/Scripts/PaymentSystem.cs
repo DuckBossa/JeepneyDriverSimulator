@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.IO;
 using System;
@@ -6,6 +7,12 @@ using System;
 
 public class PaymentSystem : MonoBehaviour {
 
+	public Text CM;
+	public Text CP;
+	public Text CC;
+	public Text TT;
+
+	
 	public enum PaymentState{
 		NoPayment, ReceivePayment, GiveChange
 	}
@@ -22,7 +29,7 @@ public class PaymentSystem : MonoBehaviour {
 	private float currPayment;
 	private Queue<float> transactions = new Queue<float>(); // only contains the amount of change needed to give back
 	private bool gettingChange;
-	public void Start(){
+	public void Awake(){
 		gettingChange = false;
 		currMoney = INITIAL_MONEY;
 		currChange = currPayment = excessChange = 0;
@@ -42,7 +49,11 @@ public class PaymentSystem : MonoBehaviour {
 	}
 
 	public void Update(){
-		Debug.Log (currState + " current money: " + currMoney + " current payment: " + currPayment + " current change : " + currChange + "number of transactions : "  + transactions.Count);
+		CM.text = "CM: " + currMoney;
+		CP.text = "CP: " + currPayment;
+		CC.text = "CC: " + currChange;
+		TT.text = "TT: " + transactions.Count;
+//		Debug.Log (currState + " current money: " + currMoney + " current payment: " + currPayment + " current change : " + currChange + "number of transactions : "  + transactions.Count);
 	}
 
 
@@ -93,8 +104,8 @@ public class PaymentSystem : MonoBehaviour {
 
 
 	public bool CanDisembark(){
-//		return currState == PaymentState.NoPayment;
-		return true;
+		return currState == PaymentState.NoPayment;
+//		return true;
 	}
 	
 
@@ -129,7 +140,6 @@ public class PaymentSystem : MonoBehaviour {
 						excessChange += (currChange - currPayment);
 					}
 					if(transactions.Count == 0){
-						Debug.Log("LOOOOOOOOOL");
 						currState = PaymentState.NoPayment;
 					
 					}
@@ -137,6 +147,7 @@ public class PaymentSystem : MonoBehaviour {
 						currState = PaymentState.ReceivePayment;
 					}
 					currChange = 0;
+					currPayment = 0;
 				}
 				break;
 		}

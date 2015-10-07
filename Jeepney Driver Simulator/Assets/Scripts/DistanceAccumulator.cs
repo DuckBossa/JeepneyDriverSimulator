@@ -14,7 +14,7 @@ public class DistanceAccumulator : MonoBehaviour {
 	private Vector3 prev;
 	private int num_para;
 	private float timeEl;
-	void Start(){
+	void Awake(){
 		prev = transform.position;
 		dist_left = new List<float>();
 		rs = GetComponent<RidingScript>();
@@ -29,6 +29,8 @@ public class DistanceAccumulator : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
+
+
 		float dist_traveled = (transform.position - prev).magnitude;
 		float vel = dist_traveled/Time.deltaTime;
 		prev = transform.position;
@@ -37,7 +39,7 @@ public class DistanceAccumulator : MonoBehaviour {
 
 		for(int i = 0; i < dist_left.Count; i++){
 			dist_left[i] -= dist_traveled;
-			Debug.Log("DIST LEFT " + i + " " + dist_left[i]); 
+//			Debug.Log("DIST LEFT " + i + " " + dist_left[i]); 
 			if(dist_left[i] <= 0){
 				dist_left.RemoveAt(i);
 				num_para++;
@@ -50,8 +52,9 @@ public class DistanceAccumulator : MonoBehaviour {
 				if(timeEl > stop_time){
 					Debug.Log("DROP DROP DROP!?");
 					if(ps.CanDisembark()){
-						while (num_para-- > 0){
+						while (num_para > 0){
 							rs.DropPassenger();
+							num_para--;
 						}
 					}
 				}
