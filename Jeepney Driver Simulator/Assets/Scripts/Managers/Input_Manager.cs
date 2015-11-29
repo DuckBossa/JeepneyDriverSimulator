@@ -22,6 +22,13 @@ public class Input_Manager : MonoBehaviour {
 	public KeyCode ml = KeyCode.A;
 	public KeyCode mr = KeyCode.D;
 	public KeyCode hk = KeyCode.H;
+	public KeyCode g1 = KeyCode.Alpha1;
+	public KeyCode g2 = KeyCode.Alpha2;
+	public KeyCode g3 = KeyCode.Alpha3;
+	public KeyCode g4 = KeyCode.Alpha4;
+	public KeyCode g5 = KeyCode.Alpha5;
+	public KeyCode gR = KeyCode.BackQuote;
+	public KeyCode cl = KeyCode.Tab;
 	public KeyCode sl = KeyCode.Less;
 	public KeyCode sr = KeyCode.Greater;
 	public KeyCode em = KeyCode.E;
@@ -32,18 +39,18 @@ public class Input_Manager : MonoBehaviour {
 	private float gasPedal;
 	private float breakPedal;
 	private float clutchPedal;
-	private int gear;
 
 	private float gasbreak;
 	private float direction;
+	private int gear;
 	private int prev_gear;
 
 	public bool isHardware;
 
-
 	public void Start(){
 		SetupSteeringWheel();
 		prev_gear = -2;
+		gear = -1;
 	}
 
 	private void SetupSteeringWheel(){
@@ -62,29 +69,31 @@ public class Input_Manager : MonoBehaviour {
 
 	public void Update(){
 		resetKeys ();
-		//ADD FIXED UPDATE RESOLUTION LISTEN HERE
-		// DrivingInput();
 		if(Input.GetKeyDown(em))
 			if(EmbarkPassenger != null)
-				EmbarkPassenger();		
+				EmbarkPassenger();
 		if (isHardware) DrivingInput();
 		else DevInput();
 	}
 
 	public void FixedUpdate(){
-		if(LogitechGSDK.LogiIsConnected(0)){
-			if((SetGear!= null && clutchPedal > 0.5f && prev_gear == -1  && gasPedal < 0.3f)|| gear == -1){
-				SetGear(gear);
+		if (isHardware && LogitechGSDK.LogiIsConnected (0)) {
+			if ((SetGear != null && clutchPedal > 0.5f && prev_gear == -1 && gasPedal < 0.3f) || gear == -1) {
+				SetGear (gear);
 			}
-			prev_gear = gear;
+		} else {
+			if ((SetGear != null && clutchPedal > 0.5f) || gear == -1) {
+				SetGear (gear);
+			}
+		}
+		prev_gear = gear;
+		
+		if(Steering != null){
+			Steering(steeringWheelDegrees);
+		}
+		if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || direction != 0)){
+			Move(direction,gasbreak);
 			
-			if(Steering != null){
-				Steering(steeringWheelDegrees);
-			}
-			if(Move != null && (gasPedal > 0 ||  breakPedal < 0 || direction != 0)){
-				Move(direction,gasbreak);
-				
-			}
 		}
 	}
 	
@@ -92,24 +101,51 @@ public class Input_Manager : MonoBehaviour {
 	public void resetKeys(){
 		gasbreak = 0;
 		direction = 0;
+		gasPedal = 0;
+		breakPedal = 0;
+		clutchPedal = 0;
 	}
 	private void DevInput(){
 		if(Input.GetKey(mf)){
 			gasbreak += 1;
+			gasPedal = 1f;
 		}		
 
 		if(Input.GetKey(mb)){
 			gasbreak -= 1;
+			breakPedal = 1f;
 		}
 
 		if (Input.GetKey(ml)) {
 			direction -= 0.5f;
+			steeringWheelDegrees = -90f;
 		}
 
 		if (Input.GetKey(mr)) {
 			direction += 0.5f;
+			steeringWheelDegrees = 90f;
 		}
 
+		if (Input.GetKey(cl)) {
+			clutchPedal = 1f;
+		}
+
+		if (Input.GetKey(g1)) {
+			gear = 1;
+		} else if (Input.GetKey(g2)) {
+			gear = 2;
+		} else if (Input.GetKey(g3)) {
+			gear = 3;
+		} else if (Input.GetKey(g4)) {
+			gear = 4;
+		} else if (Input.GetKey(g5)) {
+			gear = 5;
+		} else if (Input.GetKey(gR)) {
+			gear = 0;
+		} else if (Input.GetKey(cl)) {
+			gear = -1;
+		}
+		
 		if (Move != null) {
 			Move(direction, gasbreak);
 		} 
