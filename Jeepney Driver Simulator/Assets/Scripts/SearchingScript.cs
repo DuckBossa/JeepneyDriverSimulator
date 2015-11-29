@@ -44,8 +44,6 @@ namespace UnitySteer.Behaviors{
 				target = collided[0].gameObject;
 				pursuitUS.Quarry = collided[0].GetComponentInParent<DetectableObject> ();
 				pursuitUS.enabled = true;
-			} else {
-				Debug.Log("NO JEEP");
 			}
 		}
 
@@ -63,7 +61,6 @@ namespace UnitySteer.Behaviors{
 				if (UnityEngine.Random.Range (0, decay) < changeChance) {
 					GetComponent<PedestrianController>().changeState(PedestrianController.PedestrianState.Wandering);
 				}
-				
 				currTime = 0f;
 			}
 		}

@@ -50,7 +50,6 @@ public class DistanceAccumulator : MonoBehaviour {
 			if(vel < slow_vel){
 				timeEl += Time.deltaTime;
 				if(timeEl > stop_time){
-					Debug.Log("DROP DROP DROP!?");
 					if(ps.CanDisembark()){
 						while (num_para > 0){
 							rs.DropPassenger();

@@ -10,7 +10,6 @@ public class RidingScript : MonoBehaviour {
 	PaymentSystem ps;
 	DistanceAccumulator da;
 	void Awake () {
-
 		ps = GetComponent<PaymentSystem>();
 		da = GetComponent<DistanceAccumulator>();
 	}
@@ -36,7 +35,6 @@ public class RidingScript : MonoBehaviour {
 
 	public void DropPassenger(){
 		if(seated.Count > 0){
-			Debug.Log("LOOOOOOOOOOL");
 			GameObject passenger = seated.Pop ();
 			Rigidbody pr = passenger.gameObject.AddComponent<Rigidbody>();
 			pr.constraints =  RigidbodyConstraints.FreezeRotation;
