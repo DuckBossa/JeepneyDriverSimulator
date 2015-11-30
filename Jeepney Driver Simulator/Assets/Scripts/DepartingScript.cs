@@ -1,19 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DepartingScript : MonoBehaviour {
+namespace UnitySteer.Behaviors{
+	public class DepartingScript : MonoBehaviour {
+		public float searchRadius = 50f;
+		public float stopDistance = 10f;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+		private SteerForPursuit pursuitUS;
+		private GameObject target;
 
-	void OnDisable() {
+		// Use this for initialization
+		private void Awake () {
+			pursuitUS = GetComponent<SteerForPursuit> ();
+		}
 
-	}
+		private void OnEnable () {
+			target = Physics.OverlapSphere (transform.position, searchRadius, LayerMask.GetMask("Pathway"))[0].gameObject;
+			pursuitUS.Quarry = target.GetComponent<DetectableObject>();
+			pursuitUS.enabled = true;
+		}
 
-	// Update is called once per frame
-	void Update () {
-	
+		private void OnDisable() {
+			pursuitUS.enabled = false;
+		}
+
+		// Update is called once per frame
+		private void FixedUpdate () {
+			if((target.transform.position - gameObject.transform.position).magnitude < stopDistance){
+				GetComponent<PedestrianController> ().changeState (PedestrianController.PedestrianState.Wandering);
+			}
+		}
 	}
 }

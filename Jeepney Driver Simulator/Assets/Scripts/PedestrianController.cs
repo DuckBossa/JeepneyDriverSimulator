@@ -18,7 +18,7 @@ public class PedestrianController : MonoBehaviour {
 	public PedestrianState currState;
 
 	public void Start (){
-		changeState (PedestrianState.Searching);
+		changeState (PedestrianState.Wandering);
 	}
 	
 	public void changeState(PedestrianState x){
@@ -30,14 +30,18 @@ public class PedestrianController : MonoBehaviour {
 		switch (currState) {
 		case PedestrianState.Wandering:
 			wanderingScript.enabled = true;
+			GetComponent<MeshRenderer>().material.color = Color.blue;
 			break;
 		case PedestrianState.Searching:
+			GetComponent<MeshRenderer>().material.color = Color.red;
 			searchingScript.enabled = true;
 			break;
 		case PedestrianState.Riding:
+			GetComponent<MeshRenderer>().material.color = Color.green;
 			ridingScript.enabled = true;
 			break;
 		case PedestrianState.Departing:
+			GetComponent<MeshRenderer>().material.color = Color.grey;
 			departingScript.enabled = true;
 			break;
 			

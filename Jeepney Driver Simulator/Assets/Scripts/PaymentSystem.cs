@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.IO;
 using System;
@@ -6,6 +7,12 @@ using System;
 
 public class PaymentSystem : MonoBehaviour {
 
+	public Text CM;
+	public Text CP;
+	public Text CC;
+	public Text TT;
+
+	
 	public enum PaymentState{
 		NoPayment, ReceivePayment, GiveChange
 	}
@@ -13,6 +20,8 @@ public class PaymentSystem : MonoBehaviour {
 	public float INITIAL_MONEY = 50f;
 	public float JEEPNEY_FARE = 8f;
 	public GameObject MoneyBoxes;
+	public int MAX_CAPACITY = 8;
+	private int currCapacity;
 	private PaymentState currState;
 	private float currMoney;
 	private float currChange;
@@ -20,10 +29,11 @@ public class PaymentSystem : MonoBehaviour {
 	private float currPayment;
 	private Queue<float> transactions = new Queue<float>(); // only contains the amount of change needed to give back
 	private bool gettingChange;
-	public void Start(){
+	public void Awake(){
 		gettingChange = false;
 		currMoney = INITIAL_MONEY;
 		currChange = currPayment = excessChange = 0;
+		currCapacity = 0;
 		currState = PaymentState.NoPayment;
 	}
 
@@ -39,13 +49,23 @@ public class PaymentSystem : MonoBehaviour {
 	}
 
 	public void Update(){
+		CM.text = "CM: " + currMoney;
+		CP.text = "CP: " + currPayment;
+		CC.text = "CC: " + currChange;
+		TT.text = "TT: " + transactions.Count;
 //		Debug.Log (currState + " current money: " + currMoney + " current payment: " + currPayment + " current change : " + currChange + "number of transactions : "  + transactions.Count);
 	}
 
-	private void AddPayment(){
+
+	public bool isFull(){
+		return currCapacity == MAX_CAPACITY;
+	}
+
+	public void AddPayment(){
+		currCapacity++;
 		int randompayment = 0;
 		for(int i = 0; i < 6; i++){
-			randompayment += UnityEngine.Random.Range(1,100);
+			randompayment += UnityEngine.Random.Range(1,50);
 		}
 		randompayment /= 6;
 		float amount = JEEPNEY_FARE + randompayment;
@@ -81,6 +101,12 @@ public class PaymentSystem : MonoBehaviour {
 			}
 		}
 	}
+
+
+	public bool CanDisembark(){
+		return currState == PaymentState.NoPayment;
+//		return true;
+	}
 	
 
 
@@ -114,7 +140,6 @@ public class PaymentSystem : MonoBehaviour {
 						excessChange += (currChange - currPayment);
 					}
 					if(transactions.Count == 0){
-						Debug.Log("LOOOOOOOOOL");
 						currState = PaymentState.NoPayment;
 					
 					}
@@ -122,6 +147,7 @@ public class PaymentSystem : MonoBehaviour {
 						currState = PaymentState.ReceivePayment;
 					}
 					currChange = 0;
+					currPayment = 0;
 				}
 				break;
 		}

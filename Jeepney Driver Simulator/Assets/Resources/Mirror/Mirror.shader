@@ -1,41 +1,44 @@
-﻿Shader "Custom/Mirror" {
-	Properties {
-		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+﻿Shader "FX/MirrorReflection"
+{
+	Properties
+	{
+		_MainTex ("Base (RGB)", 2D) = "white" {}
+		[HideInInspector] _ReflectionTex ("", 2D) = "white" {}
 	}
-	SubShader {
+	SubShader
+	{
 		Tags { "RenderType"="Opaque" }
-		LOD 200
-		
-		CGPROGRAM
-		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows
-
-		// Use shader model 3.0 target, to get nicer looking lighting
-		#pragma target 3.0
-
-		sampler2D _MainTex;
-
-		struct Input {
-			float2 uv_MainTex;
-		};
-
-		half _Glossiness;
-		half _Metallic;
-		fixed4 _Color;
-
-		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = c.rgb;
-			// Metallic and smoothness come from slider variables
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
-		}
-		ENDCG
-	} 
-	FallBack "Diffuse"
+		LOD 100
+ 
+		Pass {
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#include "UnityCG.cginc"
+			struct v2f
+			{
+				float2 uv : TEXCOORD0;
+				float4 refl : TEXCOORD1;
+				float4 pos : SV_POSITION;
+			};
+			float4 _MainTex_ST;
+			v2f vert(float4 pos : POSITION, float2 uv : TEXCOORD0)
+			{
+				v2f o;
+				o.pos = mul (UNITY_MATRIX_MVP, pos);
+				o.uv = TRANSFORM_TEX(uv, _MainTex);
+				o.refl = ComputeScreenPos (o.pos);
+				return o;
+			}
+			sampler2D _MainTex;
+			sampler2D _ReflectionTex;
+			fixed4 frag(v2f i) : SV_Target
+			{
+				fixed4 tex = tex2D(_MainTex, i.uv);
+				fixed4 refl = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(i.refl));
+				return tex * refl;
+			}
+			ENDCG
+	    }
+	}
 }
