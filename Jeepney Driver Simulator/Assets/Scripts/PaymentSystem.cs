@@ -39,7 +39,7 @@ public class PaymentSystem : MonoBehaviour {
 	}
 
 	public void Update(){
-		Debug.Log (currState + " current money: " + currMoney + " current payment: " + currPayment + " current change : " + currChange + "number of transactions : "  + transactions.Count);
+//		Debug.Log (currState + " current money: " + currMoney + " current payment: " + currPayment + " current change : " + currChange + "number of transactions : "  + transactions.Count);
 	}
 
 	private void AddPayment(){
