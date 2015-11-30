@@ -49,7 +49,7 @@ public class CarPathController : MonoBehaviour
 	}
 	
 	public void FixedUpdate() {
-		if(_steering.PathPercentTraversed >= 1 - 1 / numPaths / 2) {\
+		if(_steering.PathPercentTraversed >= 1 - 1 / numPaths / 2) {
 			var pathPoints = PathFromRoot(_pathRoot);
 			_steering.Path = _followAsSpline ? new SplinePathway(pathPoints, 1) : new Vector3Pathway(pathPoints, 1);
 		}
