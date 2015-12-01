@@ -57,7 +57,6 @@ namespace UnitySteer.Behaviors{
 			currTime += Time.deltaTime;
 			if (currTime >= rate) {
 				decay /= decayMultiplier;
-				Debug.Log (decay);
 				if (UnityEngine.Random.Range (0, decay) < changeChance) {
 					GetComponent<PedestrianController>().changeState(PedestrianController.PedestrianState.Wandering);
 				}

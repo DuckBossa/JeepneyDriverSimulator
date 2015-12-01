@@ -78,12 +78,12 @@ public class PaymentSystem : MonoBehaviour {
 	private void GetChange(float amount){
 		if(currState == PaymentState.GiveChange){
 			if(currMoney - amount < 0){
-				Debug.LogWarning("Poor Game Over");
+//				Debug.LogWarning("Poor Game Over");
 			}
 			else{
 				currChange += amount;
 				currMoney -= amount;
-				Debug.Log(currChange + " is currently your change");
+//				Debug.Log(currChange + " is currently your change");
 			}
 				
 		}
@@ -113,7 +113,7 @@ public class PaymentSystem : MonoBehaviour {
 	private void OnTriggerEnter(Collider other){
 		switch(currState){
 			case PaymentState.ReceivePayment:
-				Debug.Log("Receive Payment");
+//				Debug.Log("Receive Payment");
 				currPayment = transactions.Dequeue();
 				currMoney += currPayment;
 				if(currPayment == JEEPNEY_FARE){
@@ -129,13 +129,13 @@ public class PaymentSystem : MonoBehaviour {
 				}
 				break;
 			case PaymentState.GiveChange:
-				Debug.Log ("Give Change");
+//				Debug.Log ("Give Change");
 				if(currChange < currPayment){
-					Debug.Log("Kulang Po");
+//					Debug.Log("Kulang Po");
 				}
 				else{
 					if (currChange > currPayment){
-						Debug.Log("Sobra ng " + (currChange - currPayment));
+//						Debug.Log("Sobra ng " + (currChange - currPayment));
 						currMoney += (currChange - currPayment);
 						excessChange += (currChange - currPayment);
 					}
