@@ -7,7 +7,7 @@ public class PedestrianController : MonoBehaviour {
 	public MonoBehaviour searchingScript;
 	public MonoBehaviour ridingScript;
 	public MonoBehaviour departingScript;
-
+	public Animator a;
 	public enum PedestrianState{
 		Wandering,
 		Searching,
@@ -30,21 +30,35 @@ public class PedestrianController : MonoBehaviour {
 		switch (currState) {
 		case PedestrianState.Wandering:
 			wanderingScript.enabled = true;
-			GetComponent<MeshRenderer>().material.color = Color.blue;
+			a.SetBool("Wandering",true);
+			a.SetBool("Sitting",false);
+			a.SetBool("Searching",false);
+			//GetComponent<MeshRenderer>().material.color = Color.blue;
+			//change animation
 			break;
 		case PedestrianState.Searching:
-			GetComponent<MeshRenderer>().material.color = Color.red;
+			//GetComponent<MeshRenderer>().material.color = Color.red;
 			searchingScript.enabled = true;
+			a.SetBool("Searching",true);
+			a.SetBool("Wandering",false);
+			a.SetBool("Sitting",false);
+
+
 			break;
 		case PedestrianState.Riding:
-			GetComponent<MeshRenderer>().material.color = Color.green;
+			//GetComponent<MeshRenderer>().material.color = Color.green;
 			ridingScript.enabled = true;
+			a.SetBool("Sitting",true);
+			a.SetBool("Searching",false);
+			a.SetBool("Searching",false);
 			break;
 		case PedestrianState.Departing:
-			GetComponent<MeshRenderer>().material.color = Color.grey;
+			//GetComponent<MeshRenderer>().material.color = Color.grey;
 			departingScript.enabled = true;
+			a.SetBool("Wandering",true);
+			a.SetBool("Sitting",false);
+			a.SetBool("Searching",false);
 			break;
-			
 		}
 	}
 }

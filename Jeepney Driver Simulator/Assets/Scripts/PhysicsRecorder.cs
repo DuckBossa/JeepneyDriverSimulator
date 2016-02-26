@@ -44,7 +44,6 @@ public class PhysicsRecorder : MonoBehaviour {
 	}
 
 	void End(){
-		Debug.Log("ASDSADASDADGDFGDFGDFGDFGSDAD");
 		xtw.WriteEndElement();
 		xtw.WriteEndElement();
 		xtw.Close();

@@ -43,7 +43,7 @@ public class CarPathController : MonoBehaviour
 			{
 				children.Add(t);
 			}
-			Debug.Log (t.position.ToString());
+//			Debug.Log (t.position.ToString());
 		}
 		return children.OrderBy(t => t.gameObject.name).Select(t => t.position).ToList();
 	}

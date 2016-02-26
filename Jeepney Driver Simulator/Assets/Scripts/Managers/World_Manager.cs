@@ -18,14 +18,15 @@ public class World_Manager : MonoBehaviour {
 	}
 
 	void Update () {
-		currTime += Time.deltaTime;
-		if(currTime >= TOTAL_TIME && !activated){
-			activated = true;
-			Debug.Log("Start");
-			if (EndGame!= null) EndGame();
-			Debug.Log("End");
-			Application.LoadLevel(ExitGame);
-		}
+//		currTime += Time.deltaTime;
+//		if(currTime >= TOTAL_TIME && !activated){
+//			activated = true;
+//			Debug.Log("Start");
+//			if (EndGame!= null) EndGame();
+//			Debug.Log("End");
+//			Application.Quit();
+////			Application.LoadLevel(ExitGame);
+//		}
 	}
 	
 

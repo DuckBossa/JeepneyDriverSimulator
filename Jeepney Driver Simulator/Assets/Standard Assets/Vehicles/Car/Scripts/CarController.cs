@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Vehicles.Car
 {
@@ -64,7 +65,8 @@ namespace UnityStandardAssets.Vehicles.Car
 		private float m_CurrentTorque;
 		private Rigidbody m_Rigidbody;
 		private const float k_ReversingThreshold = 0.01f;
-		
+
+		public Text GearText;
 		public bool Skidding { get; private set; }
 		public float BrakeInput { get; private set; }
 		public float CurrentSteerAngle{ get { return m_SteerAngle; }}
@@ -90,6 +92,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			m_Rigidbody = GetComponent<Rigidbody>();
 			m_CurrentTorque = m_FullTorqueOverAllWheels - (m_TractionControl*m_FullTorqueOverAllWheels);
 			m_RPM = m_MinRPM;
+			GearText.text = "Gear: " + m_GearNum.ToString();
 		}
 		
 		private float GetTorquefromRPM(float x) {
@@ -191,6 +194,7 @@ namespace UnityStandardAssets.Vehicles.Car
 				m_GearNum = -1;
 			else if (n > 5)
 				m_GearNum = 5;
+			GearText.text = "Gear: " + m_GearNum.ToString();
 			
 		}
 		

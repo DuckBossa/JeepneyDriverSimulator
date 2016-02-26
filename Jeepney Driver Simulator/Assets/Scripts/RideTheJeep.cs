@@ -9,8 +9,6 @@ public class RideTheJeep : MonoBehaviour {
 	}
 	
 	private void Board(){
-		Debug.Log("BORD MEEEEEEEEEEEEEEEEEEEEE");
 		rs.AddPassenger(gameObject);
-
 	}
 }
