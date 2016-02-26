@@ -33,6 +33,8 @@ public class PedestrianController : MonoBehaviour {
 			a.SetBool("Wandering",true);
 			a.SetBool("Sitting",false);
 			a.SetBool("Searching",false);
+			a.SetBool("Found",false);
+			Debug.Log("Walk animation");
 			//GetComponent<MeshRenderer>().material.color = Color.blue;
 			//change animation
 			break;
@@ -42,8 +44,8 @@ public class PedestrianController : MonoBehaviour {
 			a.SetBool("Searching",true);
 			a.SetBool("Wandering",false);
 			a.SetBool("Sitting",false);
-
-
+			a.SetBool("Found",false);
+			Debug.Log("Jump animation");
 			break;
 		case PedestrianState.Riding:
 			//GetComponent<MeshRenderer>().material.color = Color.green;
@@ -51,6 +53,8 @@ public class PedestrianController : MonoBehaviour {
 			a.SetBool("Sitting",true);
 			a.SetBool("Searching",false);
 			a.SetBool("Searching",false);
+			a.SetBool("Found",false);
+			Debug.Log("Sit animation");
 			break;
 		case PedestrianState.Departing:
 			//GetComponent<MeshRenderer>().material.color = Color.grey;
@@ -58,7 +62,18 @@ public class PedestrianController : MonoBehaviour {
 			a.SetBool("Wandering",true);
 			a.SetBool("Sitting",false);
 			a.SetBool("Searching",false);
+			a.SetBool("Found",false);
+			Debug.Log("Walk animation");
 			break;
 		}
 	}
+
+	public void runToJeepAnim(){
+		a.SetBool("Wandering",false);
+		a.SetBool("Sitting",false);
+		a.SetBool("Searching",false);
+		a.SetBool("Found",true);
+		Debug.Log("Run animation");
+	}
+
 }

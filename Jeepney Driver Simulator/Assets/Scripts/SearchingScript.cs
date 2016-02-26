@@ -7,7 +7,7 @@ namespace UnitySteer.Behaviors{
 		public int changeChance = 16;
 		public float rate = 1f;
 		public float searchRadius = 15f;
-		public float stopDistance = 10f;
+		public float stopDistance = 5f;
 
 		private float currTime;
 		private int decay;
@@ -44,6 +44,8 @@ namespace UnitySteer.Behaviors{
 				target = collided[0].gameObject;
 				pursuitUS.Quarry = collided[0].GetComponentInParent<DetectableObject> ();
 				pursuitUS.enabled = true;
+				GetComponent<PedestrianController>().runToJeepAnim();
+
 			}
 		}
 
